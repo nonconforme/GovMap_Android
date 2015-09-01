@@ -6,7 +6,6 @@
     <string name="text.find_geo_number_using_current_placing">Find the geo number using current placing</string>
     <string name="text.find_address_using_geo_number">Find the address using geo number</string>
 
-    <string name="text.find">Find</string>
     <string name="hint.city">City</string>
     <string name="hint.street">Street</string>
     <string name="hint.home">Home</string>

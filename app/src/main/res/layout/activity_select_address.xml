@@ -6,33 +6,32 @@
 
 
     <EditText
-        android:inputType="numberSigned"
-        style="@style/SelectAddressEditTextStyle"
         android:id="@+id/etHome_ASA"
-        android:hint="@string/hint.home"
+        style="@style/SelectAddressEditTextStyle"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:inputType="numberSigned"
+        android:hint="@string/hint.home"/>
 
     <EditText
-        style="@style/SelectAddressEditTextStyle"
-        android:hint="@string/hint.street"
         android:id="@+id/etStreet_ASA"
-        android:layout_above="@+id/etHome_ASA"
-        android:layout_centerHorizontal="true" />
+        style="@style/SelectAddressEditTextStyle"
+        android:layout_above="@id/etHome_ASA"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/hint.street"/>
 
     <EditText
-        style="@style/SelectAddressEditTextStyle"
-        android:hint="@string/hint.city"
         android:id="@+id/etCity_ASA"
-        android:layout_above="@+id/etStreet_ASA"
-        android:layout_centerHorizontal="true" />
+        style="@style/SelectAddressEditTextStyle"
+        android:layout_above="@id/etStreet_ASA"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/hint.city"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:text="@string/text.find"
-        style="@style/SmallButtonStyle"
         android:id="@+id/btnFind_ASA"
-        android:layout_below="@+id/etHome_ASA"
-        android:layout_centerHorizontal="true" />
+        style="@style/SmallButtonStyle"
+        android:layout_below="@id/etHome_ASA"
+        android:layout_centerHorizontal="true"
+        android:text="@string/text.search"/>
 
 </RelativeLayout>
