@@ -82,7 +82,6 @@ public class MainActivity extends BaseActivity implements
             mGoogleApiClient.connect();
             mNeedToSendRequest = true;
         }
-
     }
 
     protected void startLocationUpdates() {
@@ -105,8 +104,9 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void onLocationChanged(Location location) {
         stopLocationUpdates();
-        Toast.makeText(MainActivity.this, location.toString(), Toast.LENGTH_SHORT).show();
         //TODO api request
+        Toast.makeText(MainActivity.this, location.toString(), Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(MainActivity.this, MapActivity.class));
     }
 
     @Override

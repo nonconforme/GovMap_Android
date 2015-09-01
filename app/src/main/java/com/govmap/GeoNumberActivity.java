@@ -1,5 +1,6 @@
 package com.govmap;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -61,5 +62,6 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
         String geonum1 = String.valueOf(etGeoNum1.getText());
         String geonum2 = String.valueOf(etGeoNum2.getText());
         //TODO: api request
+        startActivity(new Intent(GeoNumberActivity.this, MapActivity.class));
     }
 }
