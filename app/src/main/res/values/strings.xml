@@ -1,5 +1,10 @@
 <resources>
 
     <string name="app_name">GovMap</string>
+    
+    <string name="hint.geonum1">Geo num 1</string>
+    <string name="hint.geonum2">Geo num 2</string>
+
+    <string name="text.search">Search</string>
 
 </resources>

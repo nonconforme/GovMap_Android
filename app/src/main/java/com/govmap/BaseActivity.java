@@ -11,7 +11,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            restoreLocale(savedInstanceState);
+            restoreData(savedInstanceState);
         }
         super.onCreate(savedInstanceState);
     }
@@ -22,8 +22,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-    private void restoreLocale(Bundle data) {
-
-    }
+    private void restoreData(Bundle data) { }
 
 }

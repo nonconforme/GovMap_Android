@@ -8,6 +8,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:screenOrientation">portrait</item>
         <item name="colorPrimary">@color/blue.dark</item>
+        <item name="android:label">@string/app_name</item>
     </style>
 
     <style name="SelectAddressEditTextStyle" parent="Base.V12.Widget.AppCompat.EditText">
