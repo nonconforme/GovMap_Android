@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue.light">
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned"
+        style="@style/SelectAddressEditTextStyle"
+        android:id="@+id/etHome_ASA"
+        android:text="Home"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/SelectAddressEditTextStyle"
+        android:text="Street"
+        android:id="@+id/etStreet_ASA"
+        android:layout_above="@+id/etHome_ASA"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/SelectAddressEditTextStyle"
+        android:text="City"
+        android:id="@+id/etCity_ASA"
+        android:layout_above="@+id/etStreet_ASA"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/btnFind_ASA"
+        android:layout_below="@+id/etHome_ASA"
+        android:layout_alignLeft="@+id/etHome_ASA"
+        android:layout_alignStart="@+id/etHome_ASA" />
+
+</RelativeLayout>
