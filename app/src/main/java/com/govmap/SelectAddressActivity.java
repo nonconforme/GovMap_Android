@@ -15,7 +15,7 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_address);
 
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mStreetEt = (EditText) findViewById(R.id.etStreet_ASA);
         mHomeEt = (EditText) findViewById(R.id.etHome_ASA);

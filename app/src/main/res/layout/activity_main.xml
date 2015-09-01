@@ -2,28 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="20dp"
     android:background="@color/blue.light">
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
+        style="@style/MainButtonStyle"
+        android:text="@string/text.find_geo_number_using_current_placing"
         android:id="@+id/btnFindGeoNumberByCurPos_AM"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
+        style="@style/MainButtonStyle"
+        android:text="@string/text.find_geo_number_using_address"
         android:id="@+id/btnFindGeoNumberByAddress_AM"
         android:layout_above="@+id/btnFindGeoNumberByCurPos_AM"
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
+        style="@style/MainButtonStyle"
+        android:text="@string/text.find_address_using_geo_number"
         android:id="@+id/btnFindAddressByGeoNumber_AM"
         android:layout_below="@+id/btnFindGeoNumberByCurPos_AM"
         android:layout_centerHorizontal="true" />
