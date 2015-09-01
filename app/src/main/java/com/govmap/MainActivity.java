@@ -32,9 +32,9 @@ public class MainActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.btnFindAddressByGeoNumber_AM).setOnClickListener(this);
-        findViewById(R.id.btnFindGeoNumberByAddress_AM).setOnClickListener(this);
-        findViewById(R.id.btnFindGeoNumberByCurPos_AM).setOnClickListener(this);
+        findViewById(R.id.btnFindAddressByGeoNumber_AM).setOnClickListener(MainActivity.this);
+        findViewById(R.id.btnFindGeoNumberByAddress_AM).setOnClickListener(MainActivity.this);
+        findViewById(R.id.btnFindGeoNumberByCurPos_AM).setOnClickListener(MainActivity.this);
 
         mGoogleApiClient = new GoogleApiClient.Builder(MainActivity.this)
                 .addConnectionCallbacks(MainActivity.this)
@@ -67,11 +67,11 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void findAddressByGeoNumber() {
-
+        startActivity(new Intent(MainActivity.this, GeoNumberActivity.class));
     }
 
     private void findGeoNumberByAddress() {
-        startActivity(new Intent(this, SelectAddressActivity.class));
+        startActivity(new Intent(MainActivity.this, SelectAddressActivity.class));
     }
 
     private void findGeoNumberByCurrentPosition() {
@@ -99,7 +99,7 @@ public class MainActivity extends BaseActivity implements
 
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
-                mGoogleApiClient, this);
+                mGoogleApiClient, MainActivity.this);
     }
 
     @Override
