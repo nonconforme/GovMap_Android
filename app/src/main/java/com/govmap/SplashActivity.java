@@ -1,17 +1,41 @@
 package com.govmap;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+
 
 public class SplashActivity extends BaseActivity {
+
+    private static final int DELAY_MILLISECONDS = 2000;
+
+    private Handler mHandler = new Handler();
+    private Runnable mRunnable = new NextActivityRunnable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+    }
 
-        Log.v("SplashActivity", Keys.getCertificateSHA1Fingerprint(this));
-        Log.v("SplashActivity", Keys.getHashKey(this));
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mHandler.postDelayed(mRunnable, DELAY_MILLISECONDS);
+    }
+
+    @Override
+    protected void onPause() {
+        mHandler.removeCallbacks(mRunnable);
+        super.onPause();
+    }
+
+    private class NextActivityRunnable implements Runnable {
+        @Override
+        public void run() {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            finish();
+        }
     }
 
 }
