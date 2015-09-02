@@ -20,7 +20,9 @@
         android:layout_above="@id/etGeoNum2_AGN"
         android:layout_centerHorizontal="true"
         android:hint="@string/hint.geonum1"
-        android:imeOptions="actionNext" />
+        android:imeOptions="actionNext">
+        <requestFocus/>
+    </EditText>
 
 
     <Button

@@ -7,7 +7,7 @@ import android.os.Handler;
 
 public class SplashActivity extends BaseActivity {
 
-    private static final int DELAY_MILLISECONDS = 2000;
+    private static final int DELAY_MILLISECONDS = 1500;
 
     private Handler mHandler = new Handler();
     private Runnable mRunnable = new NextActivityRunnable();

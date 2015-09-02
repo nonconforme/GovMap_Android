@@ -13,21 +13,27 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:inputType="numberSigned"
-        android:hint="@string/hint.home"/>
+        android:hint="@string/hint.home"
+        android:imeOptions="actionSearch"/>
 
     <EditText
         android:id="@+id/etStreet_ASA"
         style="@style/SelectAddressEditTextStyle"
         android:layout_above="@id/etHome_ASA"
         android:layout_centerHorizontal="true"
-        android:hint="@string/hint.street"/>
+        android:hint="@string/hint.street"
+        android:imeOptions="actionNext"/>
 
     <EditText
         android:id="@+id/etCity_ASA"
         style="@style/SelectAddressEditTextStyle"
         android:layout_above="@id/etStreet_ASA"
         android:layout_centerHorizontal="true"
-        android:hint="@string/hint.city"/>
+        android:hint="@string/hint.city"
+        android:imeOptions="actionNext">
+        <requestFocus/>
+    </EditText>
+
 
     <Button
         android:id="@+id/btnFind_ASA"

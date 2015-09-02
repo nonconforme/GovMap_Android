@@ -31,6 +31,8 @@ public class MainActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.ic_icon);
 
         findViewById(R.id.btnFindAddressByGeoNumber_AM).setOnClickListener(MainActivity.this);
         findViewById(R.id.btnFindGeoNumberByAddress_AM).setOnClickListener(MainActivity.this);

@@ -5,4 +5,10 @@
     android:background="@drawable/blue_gradient"
     tools:context=".SplashActivity">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/im_splash"/>
+
 </RelativeLayout>
