@@ -6,7 +6,6 @@
     android:background="@color/blue.light"
     tools:context=".GeoNumberActivity">
 
-
     <EditText
         android:id="@+id/etGeoNum2_AGN"
         style="@style/SelectAddressEditTextStyle"
@@ -23,7 +22,6 @@
         android:imeOptions="actionNext">
         <requestFocus/>
     </EditText>
-
 
     <Button
         android:id="@+id/btnSearch_AGN"
