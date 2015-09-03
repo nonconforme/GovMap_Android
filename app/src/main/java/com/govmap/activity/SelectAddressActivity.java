@@ -1,8 +1,11 @@
-package com.govmap;
+package com.govmap.activity;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
+import com.govmap.R;
+import com.govmap.activity.BaseActivity;
 
 /**
  * Created by Misha on 9/1/2015.

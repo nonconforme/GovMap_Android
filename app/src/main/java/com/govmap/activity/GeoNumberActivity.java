@@ -1,4 +1,4 @@
-package com.govmap;
+package com.govmap.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.govmap.R;
 
 /**
  * Created by MediumMG on 01.09.2015.
@@ -22,7 +24,7 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_geonumber);
 
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         etGeoNum1 = (EditText) findViewById(R.id.etGeoNum1_AGN);
         etGeoNum2 = (EditText) findViewById(R.id.etGeoNum2_AGN);

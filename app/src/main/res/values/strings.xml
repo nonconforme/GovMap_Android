@@ -14,5 +14,9 @@
     <string name="hint.geonum2">Geo num 2</string>
 
     <string name="text.search">Search</string>
+    <string name="title_activity_temp">TempActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_waze">Waze</string>
 
 </resources>

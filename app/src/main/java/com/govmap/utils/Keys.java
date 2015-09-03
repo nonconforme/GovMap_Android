@@ -1,4 +1,4 @@
-package com.govmap;
+package com.govmap.utils;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;

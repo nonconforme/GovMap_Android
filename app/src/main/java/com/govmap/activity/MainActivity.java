@@ -1,4 +1,4 @@
-package com.govmap;
+package com.govmap.activity;
 
 import android.content.Intent;
 import android.location.Location;
@@ -11,6 +11,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.govmap.R;
 
 /**
  * Created by Misha on 9/1/2015.

@@ -1,8 +1,10 @@
-package com.govmap;
+package com.govmap.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import com.govmap.R;
 
 
 public class SplashActivity extends BaseActivity {
