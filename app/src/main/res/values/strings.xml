@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">GovMap</string>
+    <string name="app_name">Relocate</string>
 
     <string name="text.find_geo_number_using_address">Find the geo number using address</string>
     <string name="text.find_geo_number_using_current_placing">Find the geo number using current placing</string>
@@ -18,5 +18,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_waze">Waze</string>
+    
+    <string name="req_for_nubmer_format" translatable="false">"גוש %s, חלקה %s"</string>
 
 </resources>

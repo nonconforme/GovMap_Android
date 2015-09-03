@@ -1,18 +1,18 @@
 package com.govmap.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 
+import com.govmap.MainApplication;
 import com.govmap.R;
 
 
 public class SplashActivity extends BaseActivity {
 
-    private static final int DELAY_MILLISECONDS = 1500;
-
-    private Handler mHandler = new Handler();
-    private Runnable mRunnable = new NextActivityRunnable();
+    private SplashReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,20 +23,28 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mHandler.postDelayed(mRunnable, DELAY_MILLISECONDS);
+
+        mReceiver = new SplashReceiver();
+        IntentFilter intentFilter = new IntentFilter(MainApplication.ACTION_FINISH_SPLASH);
+        registerReceiver(mReceiver,intentFilter);
+        ((MainApplication) getApplication()).loadGovSite();
     }
 
     @Override
     protected void onPause() {
-        mHandler.removeCallbacks(mRunnable);
+        if (mReceiver != null)
+            unregisterReceiver(mReceiver);
         super.onPause();
     }
 
-    private class NextActivityRunnable implements Runnable {
+    private class SplashReceiver extends BroadcastReceiver {
+
         @Override
-        public void run() {
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            finish();
+        public void onReceive(Context context, Intent intent) {
+            if (MainApplication.ACTION_FINISH_SPLASH.equals(intent.getAction())) {
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                finish();
+            }
         }
     }
 

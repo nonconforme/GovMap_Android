@@ -1,5 +1,9 @@
 package com.govmap.activity;
 
+import android.content.Context;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -22,13 +26,27 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home)
+            onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
 
     private void restoreData(Bundle data) { }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home) onBackPressed();
-        return super.onOptionsItemSelected(item);
+    private boolean isNetworkConnectionEnabled() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
+
+    private boolean isLocationServicesEnabled() {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+
+
 
 }

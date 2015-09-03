@@ -1,5 +1,8 @@
 package com.govmap.activity;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,10 +59,22 @@ public class MapActivity extends BaseActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            try {
+                //TODO :set lat lng
+                String url = "waze://?ll=48.618339, 22.326919&navigate=yes";
+                Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse(url) );
+                startActivity(intent);
+            }
+            catch (ActivityNotFoundException ex) {
+                Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( "market://details?id=com.waze" ) );
+                startActivity(intent);
+            }
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
 }
