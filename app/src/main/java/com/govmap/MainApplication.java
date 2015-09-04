@@ -22,6 +22,10 @@ public class MainApplication extends Application {
     public static final String ACTION_FINISH_SPLASH = "com.govmap.finish_splash";
     public static final String ACTION_INNER_ADDRESS = "com.govmap.inner_address";
 
+    public static final String EXTRA_DATA_CADASTRE = "data_cadastre";
+    public static final String EXTRA_DATA_ADDRESS = "data_address";
+    public static final String EXTRA_DATA_OBJECT = "data_object";
+
     private GovWebView mWebView;
 
     @Override
@@ -65,23 +69,23 @@ public class MainApplication extends Application {
     private class GovJavaScriptInterface {
 
         @JavascriptInterface
-        public void processContent(String aContent)
+        public void innerTextForAddress(String aContent)
         {
             final String content = aContent.trim();
 
             if (!TextUtils.isEmpty(content)) {
                 Intent intent = new Intent(ACTION_INNER_ADDRESS);
-                intent.putExtra("data", content);
+                intent.putExtra(EXTRA_DATA_ADDRESS, content);
                 sendBroadcast(intent);
             }
         }
+
+
+
     }
 
-
-
-
     public void checkInnerTextForAddress() {
-        mWebView.loadUrl("javascript:window.INTERFACE.processContent(document.getElementById('tdFSTableResultsFromLink').innerText);");
+        mWebView.loadUrl("javascript:window.INTERFACE.innerTextForAddress(document.getElementById('tdFSTableResultsFromLink').innerText);");
     }
 
 }

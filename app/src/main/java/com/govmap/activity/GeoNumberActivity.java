@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -15,10 +17,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.govmap.model.DataObject;
-import com.govmap.view.GovWebView;
 import com.govmap.MainApplication;
 import com.govmap.R;
+import com.govmap.model.DataObject;
+import com.govmap.view.GovWebView;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by MediumMG on 01.09.2015.
@@ -93,6 +99,7 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
     private void goToMap() {
         //TODO send data
         Intent intent = new Intent(GeoNumberActivity.this, MapActivity.class);
+        intent.putExtra(MainApplication.EXTRA_DATA_OBJECT, mDataObject);
         startActivity(intent);
         finish();
     }
@@ -152,14 +159,30 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
                 mHandler.removeCallbacks(mRunnable);
                 attemptCount = 0;
 
-                String address = intent.getStringExtra("data");
+                String address = intent.getStringExtra(MainApplication.EXTRA_DATA_ADDRESS);
                 Log.v(MainApplication.TAG, "data: '" + address + "'");
 
                 if ("לא נמצאו תוצאות מתאימות".equals(address)) {
+                    // no results found
                     Toast.makeText(GeoNumberActivity.this, address,Toast.LENGTH_LONG).show();
                 }
                 else {
-                     goToMap();
+                    // Get coordinates;
+                    mDataObject.setAddress(address);
+
+                    try {
+                        Geocoder geocoder = new Geocoder(getApplicationContext(), new Locale("he-IL"));
+                        List<Address> addresses = geocoder.getFromLocationName(address, 1);
+                        if (addresses != null) {
+                            if (addresses.size() > 0) {
+                                mDataObject.setLatitude(addresses.get(0).getLatitude());
+                                mDataObject.setLongitude(addresses.get(0).getLongitude());
+
+                                goToMap();
+                            }
+                        }
+                    }
+                    catch (IOException e) { }
                 }
             }
         }
