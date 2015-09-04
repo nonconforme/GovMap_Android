@@ -13,8 +13,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.govmap.GovWebView;
+import com.govmap.model.DataObject;
+import com.govmap.view.GovWebView;
 import com.govmap.MainApplication;
 import com.govmap.R;
 
@@ -37,6 +39,8 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
     private Runnable mRunnable = new MyRunnable();
     private GeoNumberReceiver mReceiver;
 
+    private DataObject mDataObject;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +56,7 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
 
         etGeoNum2.setOnEditorActionListener(GeoNumberActivity.this);
         btnSearch.setOnClickListener(GeoNumberActivity.this);
+
     }
 
     @Override
@@ -86,6 +91,7 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void goToMap() {
+        //TODO send data
         Intent intent = new Intent(GeoNumberActivity.this, MapActivity.class);
         startActivity(intent);
         finish();
@@ -104,11 +110,16 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void callRequest() {
+        mDataObject = new DataObject();
+
         String geonum1 = String.valueOf(etGeoNum1.getText());
         String geonum2 = String.valueOf(etGeoNum2.getText());
 
         String cadastralString = String.format(getString(R.string.req_for_nubmer_format), geonum1, geonum2);
+
         Log.v(MainApplication.TAG, cadastralString);
+        mDataObject.setCadastre(cadastralString);
+
         wvGov.loadUrl(String.format("javascript:(function() {document.getElementById('tbSearchWord').value = '%s';})();", cadastralString));
         wvGov.loadUrl("javascript:(function() {FS_Search();})();");
 
@@ -141,10 +152,15 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
                 mHandler.removeCallbacks(mRunnable);
                 attemptCount = 0;
 
-                Log.v(MainApplication.TAG, "data: '"+ intent.getStringExtra("data")+"'");
-                // TODO check
+                String address = intent.getStringExtra("data");
+                Log.v(MainApplication.TAG, "data: '" + address + "'");
 
-                goToMap();
+                if ("לא נמצאו תוצאות מתאימות".equals(address)) {
+                    Toast.makeText(GeoNumberActivity.this, address,Toast.LENGTH_LONG).show();
+                }
+                else {
+                     goToMap();
+                }
             }
         }
     }

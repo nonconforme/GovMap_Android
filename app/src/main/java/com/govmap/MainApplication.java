@@ -8,6 +8,8 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.govmap.view.GovWebView;
+
 /**
  * Created by MediumMG on 03.09.2015.
  */
@@ -71,8 +73,6 @@ public class MainApplication extends Application {
                 Intent intent = new Intent(ACTION_INNER_ADDRESS);
                 intent.putExtra("data", content);
                 sendBroadcast(intent);
-
-
             }
         }
     }

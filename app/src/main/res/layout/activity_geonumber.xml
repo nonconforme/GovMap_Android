@@ -6,12 +6,6 @@
     android:background="@color/blue.light"
     tools:context=".GeoNumberActivity">
 
-    <!--<com.govmap.GovWebView-->
-        <!--android:id="@+id/wvGov"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:visibility="invisible"/>-->
-
     <EditText
         android:id="@+id/etGeoNum2_AGN"
         style="@style/SelectAddressEditTextStyle"

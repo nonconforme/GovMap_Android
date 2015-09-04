@@ -1,4 +1,4 @@
-package com.govmap;
+package com.govmap.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
