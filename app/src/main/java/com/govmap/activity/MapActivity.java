@@ -32,8 +32,8 @@ public class MapActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        if(savedInstanceState != null)
-            mData = savedInstanceState.getParcelable(MainApplication.EXTRA_DATA_OBJECT);
+
+        mData = getIntent().getParcelableExtra(MainApplication.EXTRA_DATA_OBJECT);
 
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.activity_map_fragment)).getMap();
 
@@ -56,7 +56,8 @@ public class MapActivity extends BaseActivity {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
         mMap.animateCamera(cameraUpdate);
 
-        mMap.addMarker(new MarkerOptions().title(mData.getAddress()).snippet(mData.getCadastre()));
+        mMap.addMarker(new MarkerOptions().position(latLng).title("\u200e"+mData.getAddress())
+                .snippet("\u200e"+mData.getCadastre())).showInfoWindow();
     }
 
     @Override
