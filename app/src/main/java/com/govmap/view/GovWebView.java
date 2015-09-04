@@ -90,4 +90,9 @@ public class GovWebView extends WebView {
         setWebChromeClient(new WebChromeClient());
     }
 
+    @Override
+    public void loadUrl(String url) {
+//        Log.v(MainApplication.TAG, url+"");
+        super.loadUrl(url);
+    }
 }

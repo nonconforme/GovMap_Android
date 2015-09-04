@@ -4,10 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,29 +17,23 @@ import android.widget.Toast;
 import com.govmap.MainApplication;
 import com.govmap.R;
 import com.govmap.model.DataObject;
-import com.govmap.view.GovWebView;
+import com.govmap.model.GeocodeResponse;
+import com.govmap.utils.GeocodeClient;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by MediumMG on 01.09.2015.
  */
 public class GeoNumberActivity extends BaseActivity implements View.OnClickListener, TextView.OnEditorActionListener {
 
-    private static final int TIME_FIND = 500;
-    private static final int TIME_INNERTEXT = 200;
-    private static final int MAX_ATTEMPTS = 20;
+    private static final String NO_RESULT_FOUND_HE = "לא נמצאו תוצאות מתאימות";
 
-    private EditText etGeoNum1, etGeoNum2;
+    private EditText etBlock, etSmooth;
     private Button btnSearch;
 
-    private GovWebView wvGov;
-
-    private int attemptCount = 0;
-    private Handler mHandler = new Handler();
-    private Runnable mRunnable = new MyRunnable();
     private GeoNumberReceiver mReceiver;
 
     private DataObject mDataObject;
@@ -54,15 +45,12 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        etGeoNum1 = (EditText) findViewById(R.id.etGeoNum1_AGN);
-        etGeoNum2 = (EditText) findViewById(R.id.etGeoNum2_AGN);
+        etBlock = (EditText) findViewById(R.id.etBlock_AGN);
+        etSmooth = (EditText) findViewById(R.id.etSmooth_AGN);
         btnSearch = (Button) findViewById(R.id.btnSearch_AGN);
 
-        wvGov = ((MainApplication) getApplication()).getWebView();
-
-        etGeoNum2.setOnEditorActionListener(GeoNumberActivity.this);
+        etSmooth.setOnEditorActionListener(GeoNumberActivity.this);
         btnSearch.setOnClickListener(GeoNumberActivity.this);
-
     }
 
     @Override
@@ -76,8 +64,6 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void onPause() {
-        mHandler.removeCallbacks(mRunnable);
-        attemptCount = 0;
         if (mReceiver != null)
             unregisterReceiver(mReceiver);
         super.onPause();
@@ -97,7 +83,8 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void goToMap() {
-        //TODO send data
+        Log.v(MainApplication.TAG, mDataObject.toString());
+
         Intent intent = new Intent(GeoNumberActivity.this, MapActivity.class);
         intent.putExtra(MainApplication.EXTRA_DATA_OBJECT, mDataObject);
         startActivity(intent);
@@ -105,12 +92,12 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
     }
 
     private boolean checkData() {
-        if (TextUtils.isEmpty(etGeoNum1.getText())) {
-            etGeoNum1.requestFocus();
+        if (TextUtils.isEmpty(etBlock.getText())) {
+            etBlock.requestFocus();
             return false;
         }
-        if (TextUtils.isEmpty(etGeoNum2.getText())) {
-            etGeoNum2.requestFocus();
+        if (TextUtils.isEmpty(etSmooth.getText())) {
+            etSmooth.requestFocus();
             return false;
         }
         return true;
@@ -119,36 +106,17 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
     private void callRequest() {
         mDataObject = new DataObject();
 
-        String geonum1 = String.valueOf(etGeoNum1.getText());
-        String geonum2 = String.valueOf(etGeoNum2.getText());
+        String block = String.valueOf(etBlock.getText());
+        String smooth = String.valueOf(etSmooth.getText());
 
-        String cadastralString = String.format(getString(R.string.req_for_nubmer_format), geonum1, geonum2);
+        String cadastralString = String.format(getString(R.string.req_for_nubmer_format1), block, smooth);
 
         Log.v(MainApplication.TAG, cadastralString);
         mDataObject.setCadastre(cadastralString);
 
-        wvGov.loadUrl(String.format("javascript:(function() {document.getElementById('tbSearchWord').value = '%s';})();", cadastralString));
-        wvGov.loadUrl("javascript:(function() {FS_Search();})();");
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                wvGov.loadUrl("javascript:(function() {FSS_FindAddressForBlock();})();");
-                mHandler.postDelayed(mRunnable, TIME_INNERTEXT);
-            }
-        }, TIME_FIND);
-
+        ((MainApplication) getApplication()).startCadastreSearch(cadastralString);
     }
 
-    private class MyRunnable implements Runnable {
-        @Override
-        public void run() {
-            ((MainApplication) getApplication()).checkInnerTextForAddress();
-            attemptCount++;
-            if (attemptCount < MAX_ATTEMPTS)
-                mHandler.postDelayed(mRunnable, TIME_INNERTEXT);
-        }
-    }
 
     private class GeoNumberReceiver extends BroadcastReceiver {
 
@@ -156,35 +124,37 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
         public void onReceive(Context context, Intent intent) {
             if (MainApplication.ACTION_INNER_ADDRESS.equals(intent.getAction())) {
                 ((MainApplication) getApplication()).clearResults();
-                mHandler.removeCallbacks(mRunnable);
-                attemptCount = 0;
 
                 String address = intent.getStringExtra(MainApplication.EXTRA_DATA_ADDRESS);
-                Log.v(MainApplication.TAG, "data: '" + address + "'");
 
-                if ("לא נמצאו תוצאות מתאימות".equals(address)) {
+                if (NO_RESULT_FOUND_HE.equals(address)) {
                     // no results found
-                    Toast.makeText(GeoNumberActivity.this, address,Toast.LENGTH_LONG).show();
+                    Toast.makeText(GeoNumberActivity.this, NO_RESULT_FOUND_HE, Toast.LENGTH_LONG).show();
                 }
                 else {
                     // Get coordinates;
                     mDataObject.setAddress(address);
 
-                    try {
-                        Geocoder geocoder = new Geocoder(getApplicationContext(), new Locale("he-IL"));
-                        List<Address> addresses = geocoder.getFromLocationName(address, 1);
-                        if (addresses != null) {
-                            if (addresses.size() > 0) {
-                                mDataObject.setLatitude(addresses.get(0).getLatitude());
-                                mDataObject.setLongitude(addresses.get(0).getLongitude());
-
-                                goToMap();
-                            }
-                        }
-                    }
-                    catch (IOException e) { }
+                    GeocodeClient.get().getGeocodeByAddress(address.replace(" ", "+"), new GeocodeCallback()) ;
                 }
             }
+        }
+    }
+
+    private class GeocodeCallback implements Callback<GeocodeResponse> {
+
+        @Override
+        public void success(GeocodeResponse geocodeResponse, Response response) {
+            Log.v(MainApplication.TAG, geocodeResponse.toString());
+            mDataObject.setLatitude(geocodeResponse.results.get(0).geometry.location.lat);
+            mDataObject.setLongitude(geocodeResponse.results.get(0).geometry.location.lng);
+
+            goToMap();
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            Toast.makeText(GeoNumberActivity.this, NO_RESULT_FOUND_HE, Toast.LENGTH_LONG).show();
         }
     }
 

@@ -8,10 +8,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.govmap.MainApplication;
+import com.govmap.view.GovWebView;
+
 /**
  * Created by MediumMG on 01.09.2015.
  */
 public abstract class BaseActivity extends AppCompatActivity {
+
+    protected GovWebView wvGov;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +24,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             restoreData(savedInstanceState);
         }
         super.onCreate(savedInstanceState);
+
+        wvGov = ((MainApplication) getApplication()).getWebView();
     }
 
     @Override

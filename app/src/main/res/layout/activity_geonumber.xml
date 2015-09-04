@@ -7,19 +7,19 @@
     tools:context=".GeoNumberActivity">
 
     <EditText
-        android:id="@+id/etGeoNum2_AGN"
+        android:id="@+id/etSmooth_AGN"
         style="@style/SelectAddressEditTextStyle"
         android:layout_centerInParent="true"
-        android:hint="@string/hint.geonum2"
+        android:hint="@string/hint.smooth"
         android:inputType="numberSigned"
         android:imeOptions="actionSearch" />
 
     <EditText
-        android:id="@+id/etGeoNum1_AGN"
+        android:id="@+id/etBlock_AGN"
         style="@style/SelectAddressEditTextStyle"
-        android:layout_above="@id/etGeoNum2_AGN"
+        android:layout_above="@id/etSmooth_AGN"
         android:layout_centerHorizontal="true"
-        android:hint="@string/hint.geonum1"
+        android:hint="@string/hint.block"
         android:inputType="numberSigned"
         android:imeOptions="actionNext">
         <requestFocus/>
@@ -28,7 +28,7 @@
     <Button
         android:id="@+id/btnSearch_AGN"
         style="@style/SmallButtonStyle"
-        android:layout_below="@id/etGeoNum2_AGN"
+        android:layout_below="@id/etSmooth_AGN"
         android:layout_centerHorizontal="true"
         android:text="@string/text.search" />
 

@@ -54,7 +54,7 @@ public class DataObject implements Parcelable {
     }
 
     public void setCadastre(String cadastre) {
-        this.mCadastre = mCadastre;
+        this.mCadastre = cadastre;
     }
 
     public String getAddress() {
@@ -62,7 +62,7 @@ public class DataObject implements Parcelable {
     }
 
     public void setAddress(String adress) {
-        this.mAddress = mAddress;
+        this.mAddress = adress;
     }
 
     public double getLatitude() {
@@ -70,7 +70,7 @@ public class DataObject implements Parcelable {
     }
 
     public void setLatitude(double latitude) {
-        this.mLatitude = mLatitude;
+        this.mLatitude = latitude;
     }
 
     public double getLongitude() {
@@ -78,6 +78,16 @@ public class DataObject implements Parcelable {
     }
 
     public void setLongitude(double longitude) {
-        this.mLongitude = mLongitude;
+        this.mLongitude = longitude;
+    }
+
+    @Override
+    public String toString() {
+        return "DataObject{" +
+                "mCadastre='" + mCadastre + '\'' +
+                ", mAddress='" + mAddress + '\'' +
+                ", mLatitude=" + mLatitude +
+                ", mLongitude=" + mLongitude +
+                '}';
     }
 }

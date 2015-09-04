@@ -10,15 +10,14 @@
     <string name="hint.street">Street</string>
     <string name="hint.home">Home</string>
     
-    <string name="hint.geonum1">Geo num 1</string>
-    <string name="hint.geonum2">Geo num 2</string>
+    <string name="hint.block">Block</string>
+    <string name="hint.smooth">Smooth</string>
 
     <string name="text.search">Search</string>
-    <string name="title_activity_temp">TempActivity</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_waze">Waze</string>
     
-    <string name="req_for_nubmer_format" translatable="false">"גוש %s, חלקה %s"</string>
-
+    <string name="req_for_nubmer_format1" translatable="false">"גוש %s, חלקה %s"</string>
+    <string name="req_for_nubmer_format2" translatable="false">"גוש %s חלקה %s"</string>
 </resources>
