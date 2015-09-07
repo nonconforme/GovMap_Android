@@ -19,6 +19,10 @@ import com.govmap.model.DataObject;
 import com.govmap.model.GeocodeResponse;
 import com.govmap.utils.GeocodeClient;
 
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -132,13 +136,20 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
 
                 String cadastre = intent.getStringExtra(MainApplication.EXTRA_DATA_CADASTRE);
 
-                if (NO_RESULT_FOUND_HE.equals(cadastre)) {
+                ArrayList<Integer> numbers = new ArrayList<Integer>();
+                Pattern p = Pattern.compile("\\d+");
+                Matcher m = p.matcher(cadastre);
+                while (m.find()) {
+                    numbers.add(Integer.parseInt(m.group()));
+                }
+
+                if (NO_RESULT_FOUND_HE.equals(cadastre) || numbers.size() != 2) {
                     // no results found
                     showNotFoundToast();
                 }
                 else {
-                    // Get cadastre;
-                    mDataObject.setCadastre(cadastre);
+                    // Get cadastre numbers
+                    mDataObject.setCadastre(numbers.get(0), numbers.get(1));
 
                     GeocodeClient.get().getGeocodeByAddress(mDataObject.getAddress().replace(" ", "+"), "he", new GeocodeCallback()) ;
                 }

@@ -114,7 +114,7 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
         String cadastralString = String.format(getString(R.string.req_for_nubmer_format1), block, smooth);
 
         Log.v(MainApplication.TAG, cadastralString);
-        mDataObject.setCadastre(cadastralString);
+        mDataObject.setCadastre(Integer.valueOf(block), Integer.valueOf(smooth));
 
         ((MainApplication) getApplication()).startSearchWihCadastre(cadastralString);
     }

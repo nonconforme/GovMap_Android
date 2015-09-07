@@ -8,8 +8,8 @@ import android.os.Parcelable;
  * Created by MediumMG on 03.09.2015.
  */
 public class DataObject implements Parcelable {
-
-    private String mCadastre = "";
+    private int mBlock = 0;
+    private int mSmooth = 0;
     private String mAddress = "";
     private double mLatitude = 0.d;
     private double mLongitude = 0.d;
@@ -18,7 +18,8 @@ public class DataObject implements Parcelable {
     }
 
     protected DataObject(Parcel in) {
-        mCadastre = in.readString();
+        mBlock = in.readInt();
+        mSmooth = in.readInt();
         mAddress = in.readString();
         mLatitude = in.readDouble();
         mLongitude = in.readDouble();
@@ -31,7 +32,8 @@ public class DataObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mCadastre);
+        dest.writeInt(mBlock);
+        dest.writeInt(mSmooth);
         dest.writeString(mAddress);
         dest.writeDouble(mLatitude);
         dest.writeDouble(mLongitude);
@@ -49,12 +51,17 @@ public class DataObject implements Parcelable {
         }
     };
 
-    public String getCadastre() {
-        return mCadastre;
+    public int getBlock() {
+        return mBlock;
     }
 
-    public void setCadastre(String cadastre) {
-        this.mCadastre = cadastre;
+    public int getSmooth() {
+        return mSmooth;
+    }
+
+    public void setCadastre(int block, int smooth) {
+        this.mBlock = block;
+        this.mSmooth = smooth;
     }
 
     public String getAddress() {
@@ -84,7 +91,8 @@ public class DataObject implements Parcelable {
     @Override
     public String toString() {
         return "DataObject{" +
-                "mCadastre='" + mCadastre + '\'' +
+                "mBlock='" + mBlock + '\'' +
+                ", mSmooth='" + mSmooth + '\'' +
                 ", mAddress='" + mAddress + '\'' +
                 ", mLatitude=" + mLatitude +
                 ", mLongitude=" + mLongitude +

@@ -55,8 +55,9 @@ public class MapActivity extends BaseActivity {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
         mMap.animateCamera(cameraUpdate);
 
+        //TODO show good booble
         mMap.addMarker(new MarkerOptions().position(latLng).title("\u200e"+mData.getAddress())
-                .snippet("\u200e"+mData.getCadastre())).showInfoWindow();
+                .snippet("\u200e"+mData.getBlock())).showInfoWindow();
     }
 
     @Override

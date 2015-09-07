@@ -24,10 +24,15 @@ public class SplashActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
+
+
         mReceiver = new SplashReceiver();
         IntentFilter intentFilter = new IntentFilter(MainApplication.ACTION_FINISH_SPLASH);
-        registerReceiver(mReceiver,intentFilter);
-        ((MainApplication) getApplication()).loadGovSite();
+        registerReceiver(mReceiver, intentFilter);
+//        ((MainApplication) getApplication()).loadGovSite();
+
+
+
     }
 
     @Override
