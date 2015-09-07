@@ -137,10 +137,10 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
                     showNotFoundToast();
                 }
                 else {
-                    // Get coordinates;
+                    // Get cadastre;
                     mDataObject.setCadastre(cadastre);
 
-                    GeocodeClient.get().getGeocodeByAddress(mDataObject.getAddress().replace(" ", "+"), new GeocodeCallback()) ;
+                    GeocodeClient.get().getGeocodeByAddress(mDataObject.getAddress().replace(" ", "+"), "he", new GeocodeCallback()) ;
                 }
             }
         }

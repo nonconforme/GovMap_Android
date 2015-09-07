@@ -152,7 +152,7 @@ public class MainActivity extends BaseActivity implements
 
         String latlng = String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude());
 
-        GeocodeClient.get().getGeocodeByLatLng(latlng, new GeocodeCallback());
+        GeocodeClient.get().getGeocodeByLatLng(latlng, "he", new GeocodeCallback());
     }
 
     @Override
@@ -180,15 +180,20 @@ public class MainActivity extends BaseActivity implements
                     for(AddressComponent addressComponent :result.addressComponents) {
                         if (addressComponent.types.size() > 0 ) {
                             if ("street_number".equals(addressComponent.types.get(0))) {
-                                home = addressComponent.shortName;
+                                home = addressComponent.longName.trim();
                             }
                             else
                             if ("route".equals(addressComponent.types.get(0))) {
-                                street = addressComponent.shortName;
+                                street = addressComponent.longName
+                                        .replace("Street", "")
+                                        .replace("street", "")
+                                        .replace("St", "")
+                                        .replace("st", "")
+                                        .trim();
                             }
                             else
                             if ("locality".equals(addressComponent.types.get(0))) {
-                                city = addressComponent.shortName;
+                                city = addressComponent.longName.trim();
                             }
                         }
                     }
@@ -231,7 +236,7 @@ public class MainActivity extends BaseActivity implements
                     showNotFoundToast();
                 }
                 else {
-                    // Get coordinates;
+                    // Get cadastre;
                     mDataObject.setCadastre(cadastre);
 
                     goToMap();

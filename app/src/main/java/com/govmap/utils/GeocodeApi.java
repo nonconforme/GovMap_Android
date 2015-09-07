@@ -13,10 +13,12 @@ public interface GeocodeApi {
 
     @GET("/maps/api/geocode/json")
     public void getGeocodeByAddress(@Query("address") String address,
-                                   Callback<GeocodeResponse> callback);
+                                    @Query("language") String language,
+                                    Callback<GeocodeResponse> callback);
 
     @GET("/maps/api/geocode/json")
     public void getGeocodeByLatLng(@Query("latlng") String latLng,
+                                   @Query("language") String language,
                                    Callback<GeocodeResponse> callback);
 
 }
