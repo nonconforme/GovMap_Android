@@ -64,8 +64,6 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
         super.onPause();
     }
 
-
-
     @Override
     public void onClick(View view) {
         findGeoNumber();
@@ -110,12 +108,14 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
     }
 
     private void callRequest() {
+        mDataObject = new DataObject();
+
         String city = etCity.getText().toString();
         String street = etStreet.getText().toString();
         String home = etStreet.getText().toString();
 
-        //TODO
-        String addressString = "";
+        String addressString = String.format(getString(R.string.req_for_cadastre),
+                city, home, street);
         Log.v(MainApplication.TAG, addressString);
         mDataObject.setAddress(addressString);
 

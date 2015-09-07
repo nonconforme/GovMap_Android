@@ -19,4 +19,5 @@
     
     <string name="req_for_nubmer_format1" translatable="false">"גוש %s, חלקה %s"</string>
     <string name="req_for_nubmer_format2" translatable="false">"גוש %s חלקה %s"</string>
+    <string name="req_for_cadastre" translatable="false">%s %s %s</string>
 </resources>

@@ -1,17 +1,31 @@
 package com.govmap.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.govmap.MainApplication;
 import com.govmap.R;
+import com.govmap.model.AddressComponent;
+import com.govmap.model.DataObject;
+import com.govmap.model.GeocodeResponse;
+import com.govmap.model.Result;
+import com.govmap.utils.GeocodeClient;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by Misha on 9/1/2015.
@@ -27,6 +41,10 @@ public class MainActivity extends BaseActivity implements
 
     private GoogleApiClient mGoogleApiClient;
     private boolean mNeedToSendRequest = false;
+
+    private DataObject mDataObject;
+
+    private MainReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +66,20 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        mReceiver = new MainReceiver();
+        IntentFilter intentFilter = new IntentFilter(MainApplication.ACTION_INNER_CADASTRE);
+        registerReceiver(mReceiver, intentFilter);
+    }
+
+    @Override
     protected void onPause() {
-        super.onPause();
         stopLocationUpdates();
+        if (mReceiver != null)
+            unregisterReceiver(mReceiver);
+        super.onPause();
     }
 
 
@@ -75,6 +104,15 @@ public class MainActivity extends BaseActivity implements
 
     private void findGeoNumberByAddress() {
         startActivity(new Intent(MainActivity.this, SelectAddressActivity.class));
+    }
+
+    private void goToMap() {
+        Log.v(MainApplication.TAG, mDataObject.toString());
+
+        Intent intent = new Intent(MainActivity.this, MapActivity.class);
+        intent.putExtra(MainApplication.EXTRA_DATA_OBJECT, mDataObject);
+        startActivity(intent);
+        finish();
     }
 
     private void findGeoNumberByCurrentPosition() {
@@ -107,9 +145,14 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void onLocationChanged(Location location) {
         stopLocationUpdates();
-        //TODO api request
-        Toast.makeText(MainActivity.this, location.toString(), Toast.LENGTH_SHORT).show();
-//        startActivity(new Intent(MainActivity.this, MapActivity.class));
+
+        mDataObject = new DataObject();
+        mDataObject.setLatitude(location.getLatitude());
+        mDataObject.setLongitude(location.getLongitude());
+
+        String latlng = String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude());
+
+        GeocodeClient.get().getGeocodeByLatLng(latlng, new GeocodeCallback());
     }
 
     @Override
@@ -123,8 +166,78 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        //TODO show error
+        showNotFoundToast();
     }
 
+    private class GeocodeCallback implements Callback<GeocodeResponse> {
+
+        @Override
+        public void success(GeocodeResponse geocodeResponse, Response response) {
+            String city = "", street = "", home = "";
+
+            for (Result result : geocodeResponse.results) {
+                if (result.types.size() > 0 && "street_address".equals(result.types.get(0))) {
+                    for(AddressComponent addressComponent :result.addressComponents) {
+                        if (addressComponent.types.size() > 0 ) {
+                            if ("street_number".equals(addressComponent.types.get(0))) {
+                                home = addressComponent.shortName;
+                            }
+                            else
+                            if ("route".equals(addressComponent.types.get(0))) {
+                                street = addressComponent.shortName;
+                            }
+                            else
+                            if ("locality".equals(addressComponent.types.get(0))) {
+                                city = addressComponent.shortName;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!TextUtils.isEmpty(city) &&
+                !TextUtils.isEmpty(street) &&
+                !TextUtils.isEmpty(home)) {
+
+                String addressString = String.format(getString(R.string.req_for_cadastre),
+                        city, home, street);
+                Log.v(MainApplication.TAG, addressString);
+                mDataObject.setAddress(addressString);
+
+                ((MainApplication) getApplication()).startSearchWithAddress(addressString);
+            }
+            else {
+                showNotFoundToast();
+            }
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            showNotFoundToast();
+        }
+    }
+
+    private class MainReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (MainApplication.ACTION_INNER_CADASTRE.equals(intent.getAction())) {
+                ((MainApplication) getApplication()).clearResults();
+
+                String cadastre = intent.getStringExtra(MainApplication.EXTRA_DATA_CADASTRE);
+
+                if (NO_RESULT_FOUND_HE.equals(cadastre)) {
+                    // no results found
+                    showNotFoundToast();
+                }
+                else {
+                    // Get coordinates;
+                    mDataObject.setCadastre(cadastre);
+
+                    goToMap();
+                }
+            }
+        }
+    }
 
 }
