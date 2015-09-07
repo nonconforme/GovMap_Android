@@ -15,8 +15,7 @@
 
     <string name="text.search">Search</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_waze">Waze</string>
+    <string name="action.waze">Waze</string>
     
     <string name="req_for_nubmer_format1" translatable="false">"גוש %s, חלקה %s"</string>
     <string name="req_for_nubmer_format2" translatable="false">"גוש %s חלקה %s"</string>

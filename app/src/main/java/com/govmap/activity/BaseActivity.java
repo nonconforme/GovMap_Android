@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.govmap.MainApplication;
 import com.govmap.view.GovWebView;
@@ -15,6 +16,8 @@ import com.govmap.view.GovWebView;
  * Created by MediumMG on 01.09.2015.
  */
 public abstract class BaseActivity extends AppCompatActivity {
+
+    protected static final String NO_RESULT_FOUND_HE = "לא נמצאו תוצאות מתאימות";
 
     protected GovWebView wvGov;
 
@@ -42,18 +45,20 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void restoreData(Bundle data) { }
 
-    private boolean isNetworkConnectionEnabled() {
+    protected boolean isNetworkConnectionEnabled() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    private boolean isLocationServicesEnabled() {
+    protected boolean isLocationServicesEnabled() {
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
-
+    protected void showNotFoundToast() {
+        Toast.makeText(BaseActivity.this, NO_RESULT_FOUND_HE, Toast.LENGTH_LONG).show();
+    }
 
 
 

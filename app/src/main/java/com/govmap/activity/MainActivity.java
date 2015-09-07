@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity implements
         stopLocationUpdates();
         //TODO api request
         Toast.makeText(MainActivity.this, location.toString(), Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(MainActivity.this, MapActivity.class));
+//        startActivity(new Intent(MainActivity.this, MapActivity.class));
     }
 
     @Override

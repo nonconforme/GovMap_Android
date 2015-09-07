@@ -9,10 +9,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.govmap.MainApplication;
 import com.govmap.R;
@@ -28,8 +28,6 @@ import retrofit.client.Response;
  * Created by MediumMG on 01.09.2015.
  */
 public class GeoNumberActivity extends BaseActivity implements View.OnClickListener, TextView.OnEditorActionListener {
-
-    private static final String NO_RESULT_FOUND_HE = "לא נמצאו תוצאות מתאימות";
 
     private EditText etBlock, etSmooth;
     private Button btnSearch;
@@ -71,14 +69,13 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (checkData())
-            callRequest();
+        findAddress();
     }
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (checkData())
-            callRequest();
+        if (actionId == EditorInfo.IME_ACTION_SEARCH)
+            findAddress();
         return true;
     }
 
@@ -89,6 +86,11 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
         intent.putExtra(MainApplication.EXTRA_DATA_OBJECT, mDataObject);
         startActivity(intent);
         finish();
+    }
+
+    private void findAddress() {
+        if (checkData())
+            callRequest();
     }
 
     private boolean checkData() {
@@ -114,7 +116,7 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
         Log.v(MainApplication.TAG, cadastralString);
         mDataObject.setCadastre(cadastralString);
 
-        ((MainApplication) getApplication()).startCadastreSearch(cadastralString);
+        ((MainApplication) getApplication()).startSearchWihCadastre(cadastralString);
     }
 
 
@@ -129,7 +131,7 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
 
                 if (NO_RESULT_FOUND_HE.equals(address)) {
                     // no results found
-                    Toast.makeText(GeoNumberActivity.this, NO_RESULT_FOUND_HE, Toast.LENGTH_LONG).show();
+                    showNotFoundToast();
                 }
                 else {
                     // Get coordinates;
@@ -146,15 +148,20 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
         @Override
         public void success(GeocodeResponse geocodeResponse, Response response) {
             Log.v(MainApplication.TAG, geocodeResponse.toString());
-            mDataObject.setLatitude(geocodeResponse.results.get(0).geometry.location.lat);
-            mDataObject.setLongitude(geocodeResponse.results.get(0).geometry.location.lng);
+            if (geocodeResponse.results.size() > 0) {
 
-            goToMap();
+                mDataObject.setLatitude(geocodeResponse.results.get(0).geometry.location.lat);
+                mDataObject.setLongitude(geocodeResponse.results.get(0).geometry.location.lng);
+
+                goToMap();
+            }
+            else
+                showNotFoundToast();
         }
 
         @Override
         public void failure(RetrofitError error) {
-            Toast.makeText(GeoNumberActivity.this, NO_RESULT_FOUND_HE, Toast.LENGTH_LONG).show();
+            showNotFoundToast();
         }
     }
 

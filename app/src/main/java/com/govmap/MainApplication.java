@@ -24,6 +24,7 @@ public class MainApplication extends Application {
     // Intents
     public static final String ACTION_FINISH_SPLASH = "com.govmap.finish_splash";
     public static final String ACTION_INNER_ADDRESS = "com.govmap.inner_address";
+    public static final String ACTION_INNER_CADASTRE = "com.govmap.inner_cadastre";
 
     // Extra keys
     public static final String EXTRA_DATA_CADASTRE = "data_cadastre";
@@ -35,8 +36,11 @@ public class MainApplication extends Application {
     private static final int TIME_INNERTEXT = 500;
     private static final int MAX_ATTEMPTS = 10;
     private int attemptCount = 0;
+
     private Handler mHandler = new Handler();
-    private Runnable mRunnable = new ContentForAddressRunnable();
+
+    private Runnable mContentForAddressRunnable = new ContentForAddressRunnable();
+    private Runnable mContentForCadastreRunnable = new ContentForCadastreRunnable();
 
     private GovWebView mWebView;
 
@@ -62,7 +66,7 @@ public class MainApplication extends Application {
         mWebView.loadUrl("javascript:(function() {document.getElementById('tdFSTableResultsFromLink').innerText = '';})();");
     }
 
-    public void startCadastreSearch(String cadastre) {
+    public void startSearchWihCadastre(String cadastre) {
         mWebView.loadUrl(String.format("javascript:(function() {document.getElementById('tbSearchWord').value = '%s';})();", cadastre));
         mWebView.loadUrl("javascript:(function() {FS_Search();})();");
 
@@ -70,7 +74,20 @@ public class MainApplication extends Application {
             @Override
             public void run() {
                 mWebView.loadUrl("javascript:(function() {FSS_FindAddressForBlock();})();");
-                mHandler.postDelayed(mRunnable, TIME_INNERTEXT);
+                mHandler.postDelayed(mContentForAddressRunnable, TIME_INNERTEXT);
+            }
+        }, TIME_FIND);
+    }
+
+    public void startSearchWithAddress(String address) {
+        mWebView.loadUrl(String.format("javascript:(function() {document.getElementById('tbSearchWord').value = '%s'';})();", address));
+        mWebView.loadUrl("javascript:(function() {FS_Search();})();");
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mWebView.loadUrl("javascript:(function() {FSS_FindBlockForAddress();})();");
+                mHandler.postDelayed(mContentForCadastreRunnable, TIME_INNERTEXT);
             }
         }, TIME_FIND);
     }
@@ -78,11 +95,16 @@ public class MainApplication extends Application {
     private class ContentForAddressRunnable implements Runnable {
         @Override
         public void run() {
-
             mWebView.loadUrl("javascript:window.INTERFACE.processContentForAddress(document.getElementById('tdFSTableResultsFromLink').innerText);");
         }
     }
 
+    private class ContentForCadastreRunnable implements Runnable {
+        @Override
+        public void run() {
+            mWebView.loadUrl("javascript:window.INTERFACE.processContentForCadastre(document.getElementById('divTableResultsFromLink').innerText);");
+        }
+    }
 
     private class GovWebClient extends WebViewClient {
         @Override
@@ -107,10 +129,10 @@ public class MainApplication extends Application {
         {
             String content = aContent.trim();
 
-            Log.v(MainApplication.TAG, "content: '" + content + "'");
+            Log.v(MainApplication.TAG, "content address: '" + content + "'");
 
             if (!TextUtils.isEmpty(content)) {
-                mHandler.removeCallbacks(mRunnable);
+                mHandler.removeCallbacks(mContentForAddressRunnable);
                 attemptCount = 0;
                 Intent intent = new Intent(ACTION_INNER_ADDRESS);
                 intent.putExtra(EXTRA_DATA_ADDRESS, content);
@@ -119,7 +141,27 @@ public class MainApplication extends Application {
             else {
                 attemptCount++;
                 if (attemptCount < MAX_ATTEMPTS)
-                    mHandler.postDelayed(mRunnable, TIME_INNERTEXT);
+                    mHandler.postDelayed(mContentForAddressRunnable, TIME_INNERTEXT);
+            }
+        }
+
+        @JavascriptInterface
+        public void processContentForCadastre(String aContent) {
+            String content = aContent.trim();
+
+            Log.v(MainApplication.TAG, "content block: '" + content + "'");
+
+            if (!TextUtils.isEmpty(content)) {
+                mHandler.removeCallbacks(mContentForCadastreRunnable);
+                attemptCount = 0;
+                Intent intent = new Intent(ACTION_INNER_CADASTRE);
+                intent.putExtra(EXTRA_DATA_CADASTRE, content);
+                sendBroadcast(intent);
+            }
+            else {
+                attemptCount++;
+                if (attemptCount < MAX_ATTEMPTS)
+                    mHandler.postDelayed(mContentForCadastreRunnable, TIME_INNERTEXT);
             }
         }
     }

@@ -6,6 +6,6 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title="@string/action_waze"
+        android:title="@string/action.waze"
         app:showAsAction="always" />
 </menu>

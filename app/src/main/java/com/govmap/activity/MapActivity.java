@@ -32,7 +32,6 @@ public class MapActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
         mData = getIntent().getParcelableExtra(MainApplication.EXTRA_DATA_OBJECT);
 
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.activity_map_fragment)).getMap();
@@ -72,8 +71,7 @@ public class MapActivity extends BaseActivity {
 
         if (id == R.id.action_settings) {
             try {
-                //TODO :set lat lng
-                String url = "waze://?ll=48.618339, 22.326919&navigate=yes";
+                String url = String.format("waze://?ll=%s,%s&navigate=yes", String.valueOf(mData.getLatitude()), String.valueOf(mData.getLongitude()));
                 Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse(url) );
                 startActivity(intent);
             }
