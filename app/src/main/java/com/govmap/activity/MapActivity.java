@@ -6,12 +6,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.govmap.MainApplication;
 import com.govmap.R;
@@ -55,9 +58,9 @@ public class MapActivity extends BaseActivity {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
         mMap.animateCamera(cameraUpdate);
 
-        //TODO show good booble
-        mMap.addMarker(new MarkerOptions().position(latLng).title("\u200e"+mData.getAddress())
-                .snippet("\u200e"+mData.getBlock())).showInfoWindow();
+        mMap.setInfoWindowAdapter(new CustomWindowInfoAdapter());
+
+        mMap.addMarker(new MarkerOptions().position(latLng)).showInfoWindow();
     }
 
     @Override
@@ -86,6 +89,30 @@ public class MapActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    class CustomWindowInfoAdapter implements GoogleMap.InfoWindowAdapter {
+        private final View mMyMarkerView;
+        private final TextView mAddress, mBlock, mSmooth;
 
+        public CustomWindowInfoAdapter() {
+            mMyMarkerView = getLayoutInflater()
+                    .inflate(R.layout.window_info_maps, null);
+            mAddress = (TextView) mMyMarkerView.findViewById(R.id.tv_address);
+            mBlock = (TextView) mMyMarkerView.findViewById(R.id.tv_block);
+            mSmooth = (TextView) mMyMarkerView.findViewById(R.id.tv_smooth);
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            return null;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            mAddress.setText(mData.getAddress());
+            mBlock.setText(getString(R.string.text_block) + mData.getBlock());
+            mSmooth.setText(getString(R.string.text_smooth) + mData.getSmooth());
+            return mMyMarkerView;
+        }
+    }
 
 }

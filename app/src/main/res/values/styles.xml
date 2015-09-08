@@ -7,16 +7,17 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:screenOrientation">portrait</item>
-        <item name="colorPrimary">@color/blue.dark</item>
+        <item name="colorPrimary">@color/blue.light</item>
         <item name="android:label">@string/app_name</item>
+        <item name="colorPrimaryDark">@color/blue.dark</item>
     </style>
 
     <style name="SelectAddressEditTextStyle" parent="Base.V12.Widget.AppCompat.EditText">
+        <item name="android:layout_width">300dp</item>
+        <item name="android:layout_height">50dp</item>
         <item name="android:inputType">textPersonName</item>
         <item name="android:ems">10</item>
-        <item name="android:layout_width">300dp</item>
-        <item name="android:textSize">25sp</item>
-        <item name="android:layout_height">70dp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:textCursorDrawable">@drawable/edit_text_cursor</item>
         <item name="android:background">@drawable/select_address_edit_text_bckg</item>
@@ -28,15 +29,15 @@
         <item name="android:padding">10dp</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:background">@drawable/main_btn_bckg</item>
-        <item name="android:layout_marginTop">20dp</item>
-        <item name="android:layout_marginBottom">20dp</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="SmallButtonStyle" parent="MainButtonStyle">
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">120dp</item>
         <item name="android:layout_margin">30dp</item>
     </style>
 
