@@ -18,6 +18,7 @@ import com.govmap.MainApplication;
 import com.govmap.R;
 import com.govmap.model.DataObject;
 import com.govmap.model.GeocodeResponse;
+import com.govmap.utils.CustomTextWatcher;
 import com.govmap.utils.GeocodeClient;
 
 import retrofit.Callback;
@@ -49,6 +50,9 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
 
         etSmooth.setOnEditorActionListener(GeoNumberActivity.this);
         btnSearch.setOnClickListener(GeoNumberActivity.this);
+
+        etSmooth.addTextChangedListener(new CustomTextWatcher(etSmooth));
+        etBlock.addTextChangedListener(new CustomTextWatcher(etBlock));
     }
 
     @Override
@@ -96,10 +100,12 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
     private boolean checkData() {
         if (TextUtils.isEmpty(etBlock.getText())) {
             etBlock.requestFocus();
+            etBlock.setBackgroundResource(R.drawable.select_address_edit_text_bckg_highligt);
             return false;
         }
         if (TextUtils.isEmpty(etSmooth.getText())) {
             etSmooth.requestFocus();
+            etSmooth.setBackgroundResource(R.drawable.select_address_edit_text_bckg_highligt);
             return false;
         }
         return true;

@@ -4,8 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,6 +20,7 @@ import com.govmap.MainApplication;
 import com.govmap.R;
 import com.govmap.model.DataObject;
 import com.govmap.model.GeocodeResponse;
+import com.govmap.utils.CustomTextWatcher;
 import com.govmap.utils.GeocodeClient;
 
 import java.util.ArrayList;
@@ -48,6 +52,10 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
         etStreet = (EditText) findViewById(R.id.etStreet_ASA);
         etHome = (EditText) findViewById(R.id.etHome_ASA);
         etCity = (EditText) findViewById(R.id.etCity_ASA);
+
+        etStreet.addTextChangedListener(new CustomTextWatcher(etStreet));
+        etHome.addTextChangedListener(new CustomTextWatcher(etHome));
+        etCity.addTextChangedListener(new CustomTextWatcher(etCity));
 
         findViewById(R.id.btnFind_ASA).setOnClickListener(this);
     }
@@ -98,14 +106,17 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
     private boolean checkData() {
         if (TextUtils.isEmpty(etCity.getText())) {
             etCity.requestFocus();
+            etCity.setBackgroundResource(R.drawable.select_address_edit_text_bckg_highligt);
             return false;
         }
         if (TextUtils.isEmpty(etStreet.getText())) {
             etStreet.requestFocus();
+            etStreet.setBackgroundResource(R.drawable.select_address_edit_text_bckg_highligt);
             return false;
         }
         if (TextUtils.isEmpty(etHome.getText())) {
             etHome.requestFocus();
+            etHome.setBackgroundResource(R.drawable.select_address_edit_text_bckg_highligt);
             return false;
         }
         return true;
@@ -125,7 +136,6 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
 
         ((MainApplication) getApplication()).startSearchWithAddress(addressString);
     }
-
 
     private class SelectAddressReceiver extends BroadcastReceiver {
 
