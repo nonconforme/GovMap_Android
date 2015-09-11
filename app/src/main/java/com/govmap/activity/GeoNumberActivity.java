@@ -143,7 +143,7 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
                     // Get coordinates;
                     mDataObject.setAddress(address);
 
-                    GeocodeClient.get().getGeocodeByAddress(address.replace(" ", "+"), "he", new GeocodeCallback()) ;
+                    GeocodeClient.get().getGeocodeByAddress(address.replace(" ", "+"), "iw", new GeocodeCallback()) ;
                 }
             }
         }

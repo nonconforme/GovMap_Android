@@ -7,45 +7,53 @@
     tools:context=".MainActivity">
 
     <Button
-        style="@style/MainButtonStyle"
-        android:text="@string/text.find_geo_number_using_current_placing"
-        android:id="@+id/btnFindGeoNumberByCurPos_AM"
-        android:layout_above="@+id/btnFindAddressByGeoNumber_AM"
-        android:layout_alignLeft="@+id/btnFindGeoNumberByAddress_AM"
-        android:layout_alignStart="@+id/btnFindGeoNumberByAddress_AM" />
-
-    <Button
-        style="@style/MainButtonStyle"
-        android:text="@string/text.find_geo_number_using_address"
-        android:id="@+id/btnFindGeoNumberByAddress_AM"
-        android:layout_above="@+id/btnFindGeoNumberByCurPos_AM"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        style="@style/MainButtonStyle"
-        android:text="@string/text.find_address_using_geo_number"
         android:id="@+id/btnFindAddressByGeoNumber_AM"
+        style="@style/MainButtonStyle"
         android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/btnFindGeoNumberByCurPos_AM"
-        android:layout_alignStart="@+id/btnFindGeoNumberByCurPos_AM" />
-
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/imageView"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/logo" />
+        android:text="@string/text.find_address_using_geo_number" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/app_name"
-        android:id="@+id/textView"
-        android:textColor="@color/blue.light"
-        android:layout_below="@+id/imageView"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold" />
+    <Button
+        android:id="@+id/btnFindGeoNumberByCurPos_AM"
+        style="@style/MainButtonStyle"
+        android:layout_above="@id/btnFindAddressByGeoNumber_AM"
+        android:layout_alignLeft="@id/btnFindAddressByGeoNumber_AM"
+        android:layout_alignStart="@id/btnFindAddressByGeoNumber_AM"
+        android:text="@string/text.find_geo_number_using_current_placing" />
+
+    <Button
+        android:id="@+id/btnFindGeoNumberByAddress_AM"
+        style="@style/MainButtonStyle"
+        android:layout_above="@id/btnFindGeoNumberByCurPos_AM"
+        android:layout_alignLeft="@id/btnFindAddressByGeoNumber_AM"
+        android:layout_alignStart="@id/btnFindAddressByGeoNumber_AM"
+        android:text="@string/text.find_geo_number_using_address" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/btnFindGeoNumberByAddress_AM">
+
+        <ImageView
+            android:id="@+id/main_logo"
+            android:layout_width="@dimen/main_logo_size"
+            android:layout_height="@dimen/main_logo_size"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/logo" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/main_logo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="@string/app_name"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/blue.light"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
 </RelativeLayout>

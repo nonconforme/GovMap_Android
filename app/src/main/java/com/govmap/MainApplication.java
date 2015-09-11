@@ -6,9 +6,11 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.govmap.activity.BaseActivity;
 import com.govmap.view.GovWebView;
 
 /**
@@ -22,18 +24,21 @@ public class MainApplication extends Application {
     private final static String GOV_URL = "http://www.govmap.gov.il/";
 
     // Intents
+    public static final String ACTION_LOAD_PROGRESS = "com.govmap.load_progress";
     public static final String ACTION_FINISH_SPLASH = "com.govmap.finish_splash";
     public static final String ACTION_INNER_ADDRESS = "com.govmap.inner_address";
     public static final String ACTION_INNER_CADASTRE = "com.govmap.inner_cadastre";
 
     // Extra keys
+    public static final String EXTRA_DATA_LAOD_PROGRESS = "data_load_progress";
     public static final String EXTRA_DATA_CADASTRE = "data_cadastre";
     public static final String EXTRA_DATA_ADDRESS = "data_address";
     public static final String EXTRA_DATA_OBJECT = "data_object";
 
     // Search
     private static final int TIME_FIND = 1000;
-    private static final int TIME_INNERTEXT = 500;
+    private static final int TIME_INNERTEXT_FOR_ADDRESS = 1000;
+    private static final int TIME_INNERTEXT_FOR_CADASTRE = 2000;
     private static final int MAX_ATTEMPTS = 10;
     private int attemptCount = 0;
 
@@ -49,6 +54,7 @@ public class MainApplication extends Application {
         super.onCreate();
 
         mWebView = new GovWebView(this);
+        mWebView.setWebChromeClient(new GovWebChromeClient());
         mWebView.setWebViewClient(new GovWebClient());
         mWebView.addJavascriptInterface(new GovJavaScriptInterface(), "INTERFACE");
     }
@@ -62,8 +68,8 @@ public class MainApplication extends Application {
     }
 
     public void clearResults(){
-        mWebView.loadUrl("javascript:(function() {document.getElementById('divTableResultsFromLink').innerText = '';})();");
         mWebView.loadUrl("javascript:(function() {document.getElementById('tdFSTableResultsFromLink').innerText = '';})();");
+        mWebView.loadUrl("javascript:(function() {document.getElementById('divTableResultsFromLink').innerText = '';})();");
     }
 
     public void startSearchWihCadastre(String cadastre) {
@@ -74,20 +80,20 @@ public class MainApplication extends Application {
             @Override
             public void run() {
                 mWebView.loadUrl("javascript:(function() {FSS_FindAddressForBlock();})();");
-                mHandler.postDelayed(mContentForAddressRunnable, TIME_INNERTEXT);
+                mHandler.postDelayed(mContentForAddressRunnable, TIME_INNERTEXT_FOR_ADDRESS);
             }
         }, TIME_FIND);
     }
 
     public void startSearchWithAddress(String address) {
-        mWebView.loadUrl(String.format("javascript:(function() {document.getElementById('tbSearchWord').value = '%s'';})();", address));
+        mWebView.loadUrl(String.format("javascript:(function() {document.getElementById('tbSearchWord').value = '%s';})();", address));
         mWebView.loadUrl("javascript:(function() {FS_Search();})();");
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 mWebView.loadUrl("javascript:(function() {FSS_FindBlockForAddress();})();");
-                mHandler.postDelayed(mContentForCadastreRunnable, TIME_INNERTEXT);
+                mHandler.postDelayed(mContentForCadastreRunnable, TIME_INNERTEXT_FOR_CADASTRE);
             }
         }, TIME_FIND);
     }
@@ -102,11 +108,23 @@ public class MainApplication extends Application {
     private class ContentForCadastreRunnable implements Runnable {
         @Override
         public void run() {
+            Log.v(TAG, "ContentForCadastreRunnable");
             mWebView.loadUrl("javascript:window.INTERFACE.processContentForCadastre(document.getElementById('divTableResultsFromLink').innerText);");
         }
     }
 
+    private class GovWebChromeClient extends WebChromeClient {
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            Intent intent = new Intent(ACTION_LOAD_PROGRESS);
+            intent.putExtra(EXTRA_DATA_LAOD_PROGRESS, newProgress);
+            sendBroadcast(intent);
+            super.onProgressChanged(view, newProgress);
+        }
+    }
+
     private class GovWebClient extends WebViewClient {
+
         @Override
         public void onPageFinished(WebView view, String url) {
             Log.v(TAG, "onPageFinished: "+ url);
@@ -121,6 +139,9 @@ public class MainApplication extends Application {
             return false;
         }
     }
+
+
+
 
     private class GovJavaScriptInterface {
 
@@ -141,7 +162,9 @@ public class MainApplication extends Application {
             else {
                 attemptCount++;
                 if (attemptCount < MAX_ATTEMPTS)
-                    mHandler.postDelayed(mContentForAddressRunnable, TIME_INNERTEXT);
+                    mHandler.postDelayed(mContentForAddressRunnable, TIME_INNERTEXT_FOR_ADDRESS);
+                else
+                    processContentForAddress(BaseActivity.NO_RESULT_FOUND_HE);
             }
         }
 
@@ -161,7 +184,9 @@ public class MainApplication extends Application {
             else {
                 attemptCount++;
                 if (attemptCount < MAX_ATTEMPTS)
-                    mHandler.postDelayed(mContentForCadastreRunnable, TIME_INNERTEXT);
+                    mHandler.postDelayed(mContentForCadastreRunnable, TIME_INNERTEXT_FOR_CADASTRE);
+                else
+                    processContentForCadastre(BaseActivity.NO_RESULT_FOUND_HE);
             }
         }
     }

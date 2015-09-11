@@ -54,8 +54,6 @@ public class MainActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_icon);
 
         findViewById(R.id.btnFindAddressByGeoNumber_AM).setOnClickListener(MainActivity.this);
         findViewById(R.id.btnFindGeoNumberByAddress_AM).setOnClickListener(MainActivity.this);
@@ -156,7 +154,7 @@ public class MainActivity extends BaseActivity implements
 
         String latlng = String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude());
 
-        GeocodeClient.get().getGeocodeByLatLng(latlng, "he", new GeocodeCallback());
+        GeocodeClient.get().getGeocodeByLatLng(latlng, "iw", new GeocodeCallback());
     }
 
     @Override
@@ -184,7 +182,16 @@ public class MainActivity extends BaseActivity implements
                     for(AddressComponent addressComponent :result.addressComponents) {
                         if (addressComponent.types.size() > 0 ) {
                             if ("street_number".equals(addressComponent.types.get(0))) {
-                                home = addressComponent.longName.trim();
+                                String homeS = addressComponent.longName.trim();
+
+                                ArrayList<Integer> numbers = new ArrayList<Integer>();
+                                Pattern p = Pattern.compile("\\d+");
+                                Matcher m = p.matcher(homeS);
+                                while (m.find()) {
+                                    numbers.add(Integer.parseInt(m.group()));
+                                }
+                                if (numbers.size() > 0)
+                                    home = String.valueOf(numbers.get(0));
                             }
                             else
                             if ("route".equals(addressComponent.types.get(0))) {
@@ -194,6 +201,7 @@ public class MainActivity extends BaseActivity implements
                                         .replace("St", "")
                                         .replace("st", "")
                                         .trim();
+
                             }
                             else
                             if ("locality".equals(addressComponent.types.get(0))) {

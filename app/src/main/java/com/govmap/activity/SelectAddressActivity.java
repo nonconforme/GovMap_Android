@@ -4,11 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -57,7 +54,13 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
         etHome.addTextChangedListener(new CustomTextWatcher(etHome));
         etCity.addTextChangedListener(new CustomTextWatcher(etCity));
 
+        etHome.setOnEditorActionListener(SelectAddressActivity.this);
+
         findViewById(R.id.btnFind_ASA).setOnClickListener(this);
+
+//        etCity.setText("הרצל");
+//        etStreet.setText("ראשון לציון");
+//        etHome.setText("74");
     }
 
     @Override
@@ -127,10 +130,10 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
 
         String city = etCity.getText().toString();
         String street = etStreet.getText().toString();
-        String home = etStreet.getText().toString();
+        String home = etHome.getText().toString();
 
-        String addressString = String.format(getString(R.string.req_for_cadastre),
-                city, home, street);
+        String addressString = String.format(getString(R.string.req_for_cadastre), city, home, street);
+
         Log.v(MainApplication.TAG, addressString);
         mDataObject.setAddress(addressString);
 
@@ -161,7 +164,7 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
                     // Get cadastre numbers
                     mDataObject.setCadastre(numbers.get(0), numbers.get(1));
 
-                    GeocodeClient.get().getGeocodeByAddress(mDataObject.getAddress().replace(" ", "+"), "he", new GeocodeCallback()) ;
+                    GeocodeClient.get().getGeocodeByAddress(mDataObject.getAddress().replace(" ", "+"), "iw", new GeocodeCallback()) ;
                 }
             }
         }

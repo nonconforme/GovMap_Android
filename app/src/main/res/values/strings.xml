@@ -6,8 +6,13 @@
     <string name="text.find_geo_number_using_current_placing">Find the geo number using current placing</string>
     <string name="text.find_address_using_geo_number">Find the address using geo number</string>
 
+    <string name="text.search">Search</string>
+
     <string name="text.block">"Block : "</string>
     <string name="text.smooth">"Smooth : "</string>
+
+    <string name="text.ok">OK</string>
+    <string name="text.cancel">Cancel</string>
 
     <string name="hint.city">City</string>
     <string name="hint.street">Street</string>
@@ -16,9 +21,10 @@
     <string name="hint.block">Block</string>
     <string name="hint.smooth">Smooth</string>
 
-    <string name="text.search">Search</string>
-
     <string name="action.waze">Waze</string>
+
+    <string name="message.no_internet_connection">No internet connection. Do you want to try again?</string>
+    <string name="message.connect_error">Error occurred while trying to connect to govmap. Trying again...</string>
     
     <string name="req_for_nubmer_format1" translatable="false">"גוש %s, חלקה %s"</string>
     <string name="req_for_nubmer_format2" translatable="false">"גוש %s חלקה %s"</string>

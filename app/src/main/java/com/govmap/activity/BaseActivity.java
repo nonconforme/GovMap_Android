@@ -1,15 +1,18 @@
 package com.govmap.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.govmap.MainApplication;
+import com.govmap.R;
 import com.govmap.view.GovWebView;
 
 /**
@@ -17,7 +20,7 @@ import com.govmap.view.GovWebView;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    protected static final String NO_RESULT_FOUND_HE = "לא נמצאו תוצאות מתאימות";
+    public static final String NO_RESULT_FOUND_HE = "לא נמצאו תוצאות מתאימות";
 
     protected GovWebView wvGov;
 
@@ -29,6 +32,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         wvGov = ((MainApplication) getApplication()).getWebView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        checkConnection();
     }
 
     @Override
@@ -44,6 +54,29 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void restoreData(Bundle data) { }
+
+    protected void checkConnection() {
+        if (!isNetworkConnectionEnabled()) {
+            new AlertDialog.Builder(BaseActivity.this)
+                    .setMessage(R.string.message_no_internet_connection)
+                    .setPositiveButton(R.string.text_ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            checkConnection();
+                        }
+                    })
+                    .setNegativeButton(R.string.text_cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            BaseActivity.this.finish();
+                        }
+                    })
+                    .setCancelable(false)
+                    .create().show();
+        }
+    }
 
     protected boolean isNetworkConnectionEnabled() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
