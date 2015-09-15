@@ -1,15 +1,13 @@
 package com.govmap.activity;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,13 +15,8 @@ import android.widget.TextView;
 import com.govmap.MainApplication;
 import com.govmap.R;
 import com.govmap.model.DataObject;
-import com.govmap.model.GeocodeResponse;
 import com.govmap.utils.CustomTextWatcher;
-import com.govmap.utils.GeocodeClient;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import com.govmap.utils.DataSearchType;
 
 /**
  * Created by MediumMG on 01.09.2015.
@@ -32,10 +25,6 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
 
     private EditText etBlock, etSmooth;
     private Button btnSearch;
-
-    private GeoNumberReceiver mReceiver;
-
-    private DataObject mDataObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +47,10 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-
-        mReceiver = new GeoNumberReceiver();
-        IntentFilter intentFilter = new IntentFilter(MainApplication.ACTION_INNER_ADDRESS);
-        registerReceiver(mReceiver, intentFilter);
     }
 
     @Override
     protected void onPause() {
-        if (mReceiver != null)
-            unregisterReceiver(mReceiver);
         super.onPause();
     }
 
@@ -81,15 +64,6 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
         if (actionId == EditorInfo.IME_ACTION_SEARCH)
             findAddress();
         return true;
-    }
-
-    private void goToMap() {
-        Log.v(MainApplication.TAG, mDataObject.toString());
-
-        Intent intent = new Intent(GeoNumberActivity.this, MapActivity.class);
-        intent.putExtra(MainApplication.EXTRA_DATA_OBJECT, mDataObject);
-        startActivity(intent);
-        finish();
     }
 
     private void findAddress() {
@@ -112,63 +86,22 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void callRequest() {
-        mDataObject = new DataObject();
+        DataObject mDataObject = new DataObject();
 
         String block = String.valueOf(etBlock.getText());
         String smooth = String.valueOf(etSmooth.getText());
 
-        String cadastralString = String.format(getString(R.string.req_for_nubmer_format1), block, smooth);
-
-        Log.v(MainApplication.TAG, cadastralString);
         mDataObject.setCadastre(Integer.valueOf(block), Integer.valueOf(smooth));
 
-        ((MainApplication) getApplication()).startSearchWihCadastre(cadastralString);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(etSmooth.getWindowToken(), 0);
+
+        Intent intent = new Intent(GeoNumberActivity.this, MapActivity.class);
+        intent.putExtra(MainApplication.EXTRA_DATA_OBJECT, mDataObject);
+        intent.putExtra(MainApplication.EXTRA_DATA_SEARCH_TYPE, DataSearchType.CADASTRE.ordinal());
+        startActivity(intent);
+        finish();
     }
 
-
-    private class GeoNumberReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (MainApplication.ACTION_INNER_ADDRESS.equals(intent.getAction())) {
-                ((MainApplication) getApplication()).clearResults();
-
-                String address = intent.getStringExtra(MainApplication.EXTRA_DATA_ADDRESS);
-
-                if (NO_RESULT_FOUND_HE.equals(address)) {
-                    // no results found
-                    showNotFoundToast();
-                }
-                else {
-                    // Get coordinates;
-                    mDataObject.setAddress(address);
-
-                    GeocodeClient.get().getGeocodeByAddress(address.replace(" ", "+"), "iw", new GeocodeCallback()) ;
-                }
-            }
-        }
-    }
-
-    private class GeocodeCallback implements Callback<GeocodeResponse> {
-
-        @Override
-        public void success(GeocodeResponse geocodeResponse, Response response) {
-            Log.v(MainApplication.TAG, geocodeResponse.toString());
-            if (geocodeResponse.results.size() > 0) {
-
-                mDataObject.setLatitude(geocodeResponse.results.get(0).geometry.location.lat);
-                mDataObject.setLongitude(geocodeResponse.results.get(0).geometry.location.lng);
-
-                goToMap();
-            }
-            else
-                showNotFoundToast();
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            showNotFoundToast();
-        }
-    }
 
 }

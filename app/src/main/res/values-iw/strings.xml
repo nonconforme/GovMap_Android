@@ -3,27 +3,39 @@
     <string name="app_name">Relocate</string>
 
     <string name="text.find_geo_number_using_address">איתור גוש וחלקה ע"ב כתובת</string>
-    <string name="text.find_geo_number_using_current_placing">איתור גוש וחלקה ע"ב מיקום נוכחי</string>
+    <string name="text.find_geo_number_using_current_location">איתור גוש וחלקה ע"ב מיקום נוכחי</string>
     <string name="text.find_address_using_geo_number">איתור כתובת ע"ב גוש וחלקה</string>
 
-    <string name="text.search">חיפוש</string>
+    <string name="text.search">"חיפוש"</string>
 
     <string name="text.block">"בלוק : "</string>
     <string name="text.smooth">"חלקה : "</string>
 
-    <string name="text.ok">אוקיי</string>
-    <string name="text.cancel">לבטל</string>
+    <string name="text.address_not_found">"כתובת לא נמצא"</string>
+    <string name="text.cadastre_not_found">"לא ניתן למצוא גוש וחלקה"</string>
 
-    <string name="hint.city">עיר</string>
-    <string name="hint.street">רחוב</string>
-    <string name="hint.home">בית</string>
+    <string name="text.ok">"אוקיי"</string>
+    <string name="text.cancel">"לבטל"</string>
 
-    <string name="hint.block">בלוק</string>
-    <string name="hint.smooth">חלקה</string>
+    <string name="hint.city">"עיר"</string>
+    <string name="hint.street">"רחוב"</string>
+    <string name="hint.home">"בית"</string>
 
-    <string name="action.waze">Waze</string>
+    <string name="hint.block">"גוש"</string>
+    <string name="hint.smooth">"חלקה"</string>
+
+    <string name="action.waze">"waze נווט באמצעות"</string>
+
+    <string name="title.main">"תפריט ראשי"</string>
+    <string name="title.select_address">Main Menu</string>
+    <string name="title.geonumbers">Main Menu</string>
+    <string name="title.map">Main Menu</string>
+
 
     <string name="message.no_internet_connection">"אין חיבור לאינטרנט .האם אתה רוצה לנסות שוב?"</string>
     <string name="message.connect_error">"אירעה שגיאה בעת הניסיון להתחבר לgovmap. מנסה שוב..."</string>
+    <string name="message.address_not_found">"כתובת לא נמצא .האם אתה רוצה לנסות שוב?"</string>
+    <string name="message.cadastre_not_found">"לא יכול למצוא גוש ו חלקה .האם אתה רוצה לנסות שוב?"</string>
+
 
 </resources>

@@ -8,11 +8,12 @@ import android.os.Parcelable;
  * Created by MediumMG on 03.09.2015.
  */
 public class DataObject implements Parcelable {
-    private int mBlock = 0;
-    private int mSmooth = 0;
+
+    private int mBlock = -1;
+    private int mSmooth = -1;
     private String mAddress = "";
-    private double mLatitude = 0.d;
-    private double mLongitude = 0.d;
+    private double mLatitude = Double.MAX_VALUE;
+    private double mLongitude = Double.MAX_VALUE;
 
     public DataObject() {
     }

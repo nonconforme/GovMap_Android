@@ -5,16 +5,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.view.View;
+import android.util.DisplayMetrics;
 import android.widget.ProgressBar;
 
 import com.govmap.MainApplication;
 import com.govmap.R;
 
+import java.util.Locale;
+
 
 public class SplashActivity extends BaseActivity {
+
+
 
     private SplashReceiver mReceiver;
     private ProgressBar pbProgress;
@@ -24,13 +30,14 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        findViewById(R.id.splash_logo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                finish();
-            }
-        });
+        Locale locale = new Locale("iw", "IL");
+        Configuration config = new Configuration();
+        Locale.setDefault(locale);
+        config.locale = locale;
+
+        Resources res = getBaseContext().getResources();
+        DisplayMetrics displayMetrics = res.getDisplayMetrics();
+        res.updateConfiguration(config, displayMetrics);
 
         pbProgress = (ProgressBar) findViewById(R.id.splash_progress);
     }
@@ -90,7 +97,7 @@ public class SplashActivity extends BaseActivity {
             }
             else
             if (MainApplication.ACTION_LOAD_PROGRESS.equals(intent.getAction())) {
-                pbProgress.setProgress(intent.getIntExtra(MainApplication.EXTRA_DATA_LAOD_PROGRESS, 0));
+                pbProgress.setProgress(intent.getIntExtra(MainApplication.EXTRA_DATA_LOAD_PROGRESS, 0));
             }
         }
     }

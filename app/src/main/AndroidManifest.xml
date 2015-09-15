@@ -37,19 +37,19 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:label=""
+            android:label="@string/title.main"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.SelectAddressActivity"
-            android:label=""
+            android:label="@string/title.select_address"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.GeoNumberActivity"
-            android:label=""
+            android:label="@string/title.geonumbers"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.MapActivity"
-            android:label=""
+            android:label="@string/title.map"
             android:theme="@style/AppTheme" />
 
         <meta-data

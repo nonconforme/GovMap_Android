@@ -3,10 +3,13 @@ package com.govmap.activity;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -14,6 +17,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,7 +35,9 @@ import com.govmap.model.AddressComponent;
 import com.govmap.model.DataObject;
 import com.govmap.model.GeocodeResponse;
 import com.govmap.model.Result;
+import com.govmap.utils.DataSearchType;
 import com.govmap.utils.GeocodeClient;
+import com.govmap.view.GovProgressDialog;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -40,10 +50,25 @@ import retrofit.client.Response;
 /**
  * Created by MediumMG on 01.09.2015.
  */
-public class MapActivity extends BaseActivity implements GoogleMap.OnMarkerDragListener, GoogleMap.OnMapLongClickListener {
+public class MapActivity extends BaseActivity implements
+        GoogleMap.OnMarkerDragListener,
+        GoogleMap.OnMapLongClickListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
+
+    public static int LOCATION_INTERVAL = 20000;
+    public static int LOCATION_FASTEST_INTERVAL = LOCATION_INTERVAL / 2;
+
+    private GoogleApiClient mGoogleApiClient;
+    private boolean mNeedToSendRequest = false;
+
+    private GovProgressDialog mProgressDialog;
 
     private GoogleMap mMap;
-    private DataObject mData, mTemporaryData;
+
+    private DataObject mData;
+    private DataSearchType mSearchType;
 
     private Marker mMarker;
     private MapReceiver mReceiver;
@@ -56,10 +81,20 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMarkerDragL
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         mData = getIntent().getParcelableExtra(MainApplication.EXTRA_DATA_OBJECT);
+        mSearchType = DataSearchType.getEnum(getIntent().getIntExtra(MainApplication.EXTRA_DATA_SEARCH_TYPE, -1));
 
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.activity_map_fragment)).getMap();
 
-        if (mMap != null && mData != null) {
+        mProgressDialog = new GovProgressDialog(MapActivity.this);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(MapActivity.this)
+                .addConnectionCallbacks(MapActivity.this)
+                .addOnConnectionFailedListener(MapActivity.this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+
+        if (mMap != null && mData != null && mSearchType != null) {
             mMap.getUiSettings().setAllGesturesEnabled(true);
             mMap.getUiSettings().setCompassEnabled(true);
             mMap.getUiSettings().setIndoorLevelPickerEnabled(true);
@@ -71,24 +106,12 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMarkerDragL
 
             mMap.setInfoWindowAdapter(new CustomWindowInfoAdapter());
 
-            animateMapToLocation();
+            Log.v(MainApplication.TAG, "get data: " + mData.toString());
+            startSearch();
         }
         else
             finish();
     }
-
-    private void animateMapToLocation() {
-        if (mMarker != null)
-            mMarker.remove();
-
-        LatLng latLng = new LatLng(mData.getLatitude(), mData.getLongitude());
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
-        mMap.animateCamera(cameraUpdate);
-
-        mMarker = mMap.addMarker(new MarkerOptions().position(latLng));
-        mMarker.showInfoWindow();
-    }
-
 
     @Override
     protected void onResume() {
@@ -96,11 +119,13 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMarkerDragL
 
         mReceiver = new MapReceiver();
         IntentFilter intentFilter = new IntentFilter(MainApplication.ACTION_INNER_CADASTRE);
+        intentFilter.addAction(MainApplication.ACTION_INNER_ADDRESS);
         registerReceiver(mReceiver, intentFilter);
     }
 
     @Override
     protected void onPause() {
+        stopLocationUpdates();
         if (mReceiver != null)
             unregisterReceiver(mReceiver);
         super.onPause();
@@ -134,31 +159,53 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMarkerDragL
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        mTemporaryData = new DataObject();
-        mTemporaryData.setLatitude(latLng.latitude);
-        mTemporaryData.setLongitude(latLng.longitude);
-        String latlng = String.valueOf(latLng.latitude) + "," + String.valueOf(latLng.longitude);
-
-        GeocodeClient.get().getGeocodeByLatLng(latlng, "iw", new GeocodeCallback());
+        mSearchType = DataSearchType.COORDINATES;
+        mData = new DataObject();
+        mData.setLatitude(latLng.latitude);
+        mData.setLongitude(latLng.longitude);
+        startSearch();
     }
 
     @Override
-    public void onMarkerDragStart(Marker marker) {
-        mTemporaryData = new DataObject();
-    }
+    public void onMarkerDragStart(Marker marker) { }
 
     @Override
     public void onMarkerDrag(Marker marker) { }
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
-
-        mTemporaryData.setLatitude(marker.getPosition().latitude);
-        mTemporaryData.setLongitude(marker.getPosition().longitude);
-        String latlng = String.valueOf(marker.getPosition().latitude) + "," + String.valueOf(marker.getPosition().longitude);
-
-        GeocodeClient.get().getGeocodeByLatLng(latlng, "iw", new GeocodeCallback());
+        mSearchType = DataSearchType.COORDINATES;
+        mData = new DataObject();
+        mData.setLatitude(marker.getPosition().latitude);
+        mData.setLongitude(marker.getPosition().longitude);
+        startSearch();
     }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        if (mNeedToSendRequest)
+            startLocationUpdates();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) { }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+//        notFoundAddress();
+        animateMapToLocation();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        stopLocationUpdates();
+
+        mData.setLatitude(location.getLatitude());
+        mData.setLongitude(location.getLongitude());
+        mSearchType = DataSearchType.COORDINATES;
+        startSearch();
+    }
+
 
     class CustomWindowInfoAdapter implements GoogleMap.InfoWindowAdapter {
         private final View mMyMarkerView;
@@ -178,9 +225,22 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMarkerDragL
 
         @Override
         public View getInfoContents(Marker marker) {
-            mAddress.setText(mData.getAddress());
-            mBlock.setText(getString(R.string.text_block) + mData.getBlock());
-            mSmooth.setText(getString(R.string.text_smooth) + mData.getSmooth());
+            if (TextUtils.isEmpty(mData.getAddress())) {
+                mAddress.setText("\u200F" + getString(R.string.text_address_not_found));
+            }
+            else {
+                mAddress.setText(mData.getAddress());
+            }
+
+            if (mData.getBlock() < 0  &&  mData.getSmooth() < 0) {
+                mBlock.setText("\u200F" + getString(R.string.text_cadastre_not_found));
+                mSmooth.setVisibility(View.GONE);
+            }
+            else {
+                mSmooth.setVisibility(View.VISIBLE);
+                mBlock.setText("\u200F" + getString(R.string.text_block) + mData.getBlock());
+                mSmooth.setText("\u200F" + getString(R.string.text_smooth) + mData.getSmooth());
+            }
             return mMyMarkerView;
         }
     }
@@ -188,10 +248,153 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMarkerDragL
 
 
 
+    private void animateMapToLocation() {
+        Log.v(MainApplication.TAG, "show data: " + mData.toString());
+        if (mProgressDialog != null && mProgressDialog.isShowing())
+            mProgressDialog.dismiss();
+
+        if (mData.getLatitude() == Double.MAX_VALUE ||
+            mData.getLongitude() == Double.MAX_VALUE) {
+            notFoundAddress();
+            return;
+        }
+        if (mMarker != null)
+            mMarker.remove();
+
+        LatLng latLng = new LatLng(mData.getLatitude(), mData.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+        mMap.animateCamera(cameraUpdate);
+
+        mMarker = mMap.addMarker(new MarkerOptions().position(latLng));
+        mMarker.showInfoWindow();
+    }
+
+    private void startSearch() {
+        switch (mSearchType) {
+            case ADDRESS: {
+                ((MainApplication) getApplication()).startSearchWithAddress(mData.getAddress());
+                break;
+            }
+            case COORDINATES: {
+                sendGetAddressRequest(mData.getLatitude(), mData.getLongitude());
+                break;
+            }
+            case CADASTRE: {
+                String cadastralString = String.format(getString(R.string.req_for_nubmer_format1),
+                        String.valueOf(mData.getBlock()),
+                        String.valueOf(mData.getSmooth()));
+                ((MainApplication) getApplication()).startSearchWihCadastre(cadastralString);
+                break;
+            }
+            case CURRENT_LOCATION: {
+                if (mGoogleApiClient.isConnected()) {
+                    startLocationUpdates();
+                }
+                else {
+                    mGoogleApiClient.connect();
+                    mNeedToSendRequest = true;
+                }
+                break;
+            }
+        }
+        if (mProgressDialog != null && !mProgressDialog.isShowing())
+            mProgressDialog.show();
+    }
+
+    private void sendGetAddressRequest(double latitude, double longitude) {
+        String latlng = String.valueOf(latitude) + "," + String.valueOf(longitude);
+        GeocodeClient.get().getGeocodeByLatLng(latlng, "iw", new GetAddressCallback());
+    }
+
+    private void sendGetCoordinatesRequest(String address) {
+        GeocodeClient.get().getGeocodeByAddress(address.replace(" ", "+"), "iw", new GetCoordinatesCallback()) ;
+    }
+
+    protected void startLocationUpdates() {
+        LocationRequest locationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(LOCATION_INTERVAL)
+                .setFastestInterval(LOCATION_FASTEST_INTERVAL);
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, locationRequest, MapActivity.this);
+
+        mNeedToSendRequest = false;
+    }
+
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, MapActivity.this);
+    }
 
 
 
-    private class GeocodeCallback implements Callback<GeocodeResponse> {
+
+
+
+    private class MapReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (MainApplication.ACTION_INNER_CADASTRE.equals(intent.getAction())) {
+                ((MainApplication) getApplication()).clearResults();
+
+                String cadastre = intent.getStringExtra(MainApplication.EXTRA_DATA_CADASTRE);
+
+                ArrayList<Integer> numbers = new ArrayList<Integer>();
+                Pattern p = Pattern.compile("\\d+");
+                Matcher m = p.matcher(cadastre);
+                while (m.find()) {
+                    numbers.add(Integer.parseInt(m.group()));
+                }
+
+                if (NO_RESULT_FOUND_HE.equals(cadastre) || numbers.size() != 2) {
+                    // no results found
+//                    notFoundCadastre();
+                    animateMapToLocation();
+                }
+                else {
+                    // Get cadastre numbers
+                    mData.setCadastre(numbers.get(0), numbers.get(1));
+
+                    switch (mSearchType) {
+                        case ADDRESS: {
+                            sendGetCoordinatesRequest(mData.getAddress());
+                            break;
+                        }
+                        case COORDINATES: {
+                            animateMapToLocation();
+                            break;
+                        }
+                        case CADASTRE: {
+                            break;
+                        }
+                    }
+
+                    animateMapToLocation();
+                }
+            }
+
+            else
+            if  (MainApplication.ACTION_INNER_ADDRESS.equals(intent.getAction())) {
+                ((MainApplication) getApplication()).clearResults();
+
+                String address = intent.getStringExtra(MainApplication.EXTRA_DATA_ADDRESS);
+
+                if (NO_RESULT_FOUND_HE.equals(address)) {
+                    // no results found
+//                    notFoundAddress();
+                    animateMapToLocation();
+                }
+                else {
+                    // Get coordinates;
+                    mData.setAddress(address);
+                    sendGetCoordinatesRequest(mData.getAddress());
+                }
+            }
+        }
+    }
+
+    private class GetAddressCallback implements Callback<GeocodeResponse> {
 
         @Override
         public void success(GeocodeResponse geocodeResponse, Response response) {
@@ -233,67 +436,105 @@ public class MapActivity extends BaseActivity implements GoogleMap.OnMarkerDragL
 
             if (!TextUtils.isEmpty(city) &&
                 !TextUtils.isEmpty(street) &&
-                !TextUtils.isEmpty(home) &&
-                mTemporaryData != null) {
+                !TextUtils.isEmpty(home)) {
 
                 String addressString = String.format(getString(R.string.req_for_cadastre),
                         city, home, street);
-                Log.v(MainApplication.TAG, addressString);
-                mTemporaryData.setAddress(addressString);
+                mData.setAddress(addressString);
 
-                ((MainApplication) getApplication()).startSearchWithAddress(addressString);
+                switch (mSearchType) {
+                    case ADDRESS: {
+                        break;
+                    }
+                    case COORDINATES: {
+                        ((MainApplication) getApplication()).startSearchWithAddress(addressString);
+                        break;
+                    }
+                    case CADASTRE: {
+                        break;
+                    }
+                }
             }
             else {
-                showNotFoundToast();
+//                notFoundAddress();
+                animateMapToLocation();
             }
         }
 
         @Override
         public void failure(RetrofitError error) {
-            showNotFoundToast();
+//            notFoundAddress();
+            animateMapToLocation();
         }
     }
 
-    private class MapReceiver extends BroadcastReceiver {
+    private class GetCoordinatesCallback implements Callback<GeocodeResponse> {
 
         @Override
-        public void onReceive(Context context, Intent intent) {
-            if (MainApplication.ACTION_INNER_CADASTRE.equals(intent.getAction())) {
-                ((MainApplication) getApplication()).clearResults();
+        public void success(GeocodeResponse geocodeResponse, Response response) {
+            if (geocodeResponse.results.size() > 0) {
 
-                String cadastre = intent.getStringExtra(MainApplication.EXTRA_DATA_CADASTRE);
+                mData.setLatitude(geocodeResponse.results.get(0).geometry.location.lat);
+                mData.setLongitude(geocodeResponse.results.get(0).geometry.location.lng);
 
-                ArrayList<Integer> numbers = new ArrayList<Integer>();
-                Pattern p = Pattern.compile("\\d+");
-                Matcher m = p.matcher(cadastre);
-                while (m.find()) {
-                    numbers.add(Integer.parseInt(m.group()));
-                }
-
-                if (NO_RESULT_FOUND_HE.equals(cadastre) || numbers.size() != 2 || mTemporaryData == null) {
-                    // no results found
-                    showNotFoundToast();
-                }
-                else {
-                    // Get cadastre numbers
-                    mTemporaryData.setCadastre(numbers.get(0), numbers.get(1));
-
-                    if (mTemporaryData != null) {
-                        mData = mTemporaryData;
-                        mTemporaryData = null;
-                    }
-
-                    animateMapToLocation();
-                }
+                animateMapToLocation();
             }
+            else
+//                notFoundAddress();
+                animateMapToLocation();
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+//            notFoundAddress();
+            animateMapToLocation();
         }
     }
 
-    @Override
-    protected void showNotFoundToast() {
-        mTemporaryData = null;
-        super.showNotFoundToast();
+    private void notFoundAddress() {
+        if (mProgressDialog != null && mProgressDialog.isShowing())
+            mProgressDialog.dismiss();
+        new AlertDialog.Builder(MapActivity.this)
+                .setMessage(R.string.message_address_not_found)
+                .setPositiveButton(R.string.text_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        startSearch();
+                    }
+                })
+                .setNegativeButton(R.string.text_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(false)
+                .create().show();
     }
+
+    private void notFoundCadastre() {
+        if (mProgressDialog != null && mProgressDialog.isShowing())
+            mProgressDialog.dismiss();
+        new AlertDialog.Builder(MapActivity.this)
+                .setMessage(R.string.message_cadastre_not_found)
+                .setPositiveButton(R.string.text_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        startSearch();
+                    }
+                })
+                .setNegativeButton(R.string.text_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(false)
+                .create().show();
+    }
+
 
 
 }

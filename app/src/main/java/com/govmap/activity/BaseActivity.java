@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.govmap.MainApplication;
 import com.govmap.R;
@@ -39,6 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onResume();
 
         checkConnection();
+
     }
 
     @Override
@@ -87,10 +87,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected boolean isLocationServicesEnabled() {
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-    }
-
-    protected void showNotFoundToast() {
-        Toast.makeText(BaseActivity.this, NO_RESULT_FOUND_HE, Toast.LENGTH_LONG).show();
     }
 
 

@@ -4,6 +4,8 @@
     <color name="orange.light">#FE893B</color>
     <color name="orange.dark">#FF6701</color>
 
+    <color name="grey.transparent">#99000000</color>
+
     <color name="white">#fafafa</color>
     <color name="gray">#b0bec5</color>
     <color name="blue.light">#03a9f4</color>

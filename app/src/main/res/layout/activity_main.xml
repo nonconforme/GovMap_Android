@@ -11,7 +11,8 @@
         style="@style/MainButtonStyle"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/text.find_address_using_geo_number" />
+        android:text="@string/text.find_address_using_geo_number"
+        android:layout_marginBottom="30dp"/>
 
     <Button
         android:id="@+id/btnFindGeoNumberByCurPos_AM"
@@ -19,7 +20,7 @@
         android:layout_above="@id/btnFindAddressByGeoNumber_AM"
         android:layout_alignLeft="@id/btnFindAddressByGeoNumber_AM"
         android:layout_alignStart="@id/btnFindAddressByGeoNumber_AM"
-        android:text="@string/text.find_geo_number_using_current_placing" />
+        android:text="@string/text.find_geo_number_using_current_location" />
 
     <Button
         android:id="@+id/btnFindGeoNumberByAddress_AM"
@@ -29,31 +30,29 @@
         android:layout_alignStart="@id/btnFindAddressByGeoNumber_AM"
         android:text="@string/text.find_geo_number_using_address" />
 
+    <TextView
+        android:id="@+id/txt_Relocate_AM"
+        android:layout_above="@id/btnFindGeoNumberByAddress_AM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/app_name"
+        android:textColor="@color/blue.light"
+        android:textSize="24sp"
+        android:layout_marginBottom="20dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/btnFindGeoNumberByAddress_AM">
+        android:layout_above="@id/txt_Relocate_AM"
+        android:layout_marginBottom="10dp">
 
         <ImageView
             android:id="@+id/main_logo"
             android:layout_width="@dimen/main_logo_size"
             android:layout_height="@dimen/main_logo_size"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
             android:src="@drawable/logo" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/main_logo"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:text="@string/app_name"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/blue.light"
-            android:textStyle="bold" />
 
     </RelativeLayout>
 </RelativeLayout>
