@@ -12,6 +12,6 @@
         android:right="5dp"
         android:bottom="5dp" />
 
-    <stroke android:width="2px" android:color="@color/gray"/>
+    <stroke android:width="2px" android:color="@color/blue.light"/>
 
 </shape>

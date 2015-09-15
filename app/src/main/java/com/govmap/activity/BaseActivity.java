@@ -43,6 +43,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        GovWebView webView = ((MainApplication) getApplication()).getWebView();
+        if (webView != null)
+            webView.saveState(outState);
         super.onSaveInstanceState(outState);
     }
 
@@ -53,7 +56,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void restoreData(Bundle data) { }
+    private void restoreData(Bundle data) {
+        GovWebView webView = ((MainApplication) getApplication()).getWebView();
+        if (webView == null)
+            webView = new GovWebView(getApplication());
+        webView.restoreState(data);
+    }
 
     protected void checkConnection() {
         if (!isNetworkConnectionEnabled()) {

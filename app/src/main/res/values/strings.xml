@@ -17,6 +17,9 @@
     <string name="text.ok">OK</string>
     <string name="text.cancel">Cancel</string>
 
+    <string name="text.normal">Normal</string>
+    <string name="text.satellite">Satellite</string>
+
     <string name="hint.city">City</string>
     <string name="hint.street">Street</string>
     <string name="hint.home">Home</string>
@@ -32,9 +35,9 @@
     <string name="message.cadastre_not_found">Can\'t find Block &amp; Smooth. Do you want to try again?</string>
 
     <string name="title.main">Main Menu</string>
-    <string name="title.select_address">Select Address</string>
-    <string name="title.geonumbers">GeoNumbers</string>
-    <string name="title.map">Map</string>
+    <string name="title.select_address">Search By Address</string>
+    <string name="title.geonumbers">Search By Block &amp; Smooth</string>
+    <string name="title.map"> </string>
     
     <string name="req_for_nubmer_format1" translatable="false">"גוש %s, חלקה %s"</string>
     <string name="req_for_nubmer_format2" translatable="false">"גוש %s חלקה %s"</string>

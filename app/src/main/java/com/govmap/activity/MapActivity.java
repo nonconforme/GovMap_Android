@@ -51,6 +51,7 @@ import retrofit.client.Response;
  * Created by MediumMG on 01.09.2015.
  */
 public class MapActivity extends BaseActivity implements
+        View.OnClickListener,
         GoogleMap.OnMarkerDragListener,
         GoogleMap.OnMapLongClickListener,
         GoogleApiClient.ConnectionCallbacks,
@@ -66,6 +67,7 @@ public class MapActivity extends BaseActivity implements
     private GovProgressDialog mProgressDialog;
 
     private GoogleMap mMap;
+    private TextView mNormal, mSatellite;
 
     private DataObject mData;
     private DataSearchType mSearchType;
@@ -84,6 +86,8 @@ public class MapActivity extends BaseActivity implements
         mSearchType = DataSearchType.getEnum(getIntent().getIntExtra(MainApplication.EXTRA_DATA_SEARCH_TYPE, -1));
 
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.activity_map_fragment)).getMap();
+        mNormal = (TextView) findViewById(R.id.activity_map_type_normal);
+        mSatellite = (TextView) findViewById(R.id.activity_map_type_satellite);
 
         mProgressDialog = new GovProgressDialog(MapActivity.this);
 
@@ -94,13 +98,16 @@ public class MapActivity extends BaseActivity implements
                 .build();
         mGoogleApiClient.connect();
 
-        if (mMap != null && mData != null && mSearchType != null) {
-            mMap.getUiSettings().setAllGesturesEnabled(true);
-            mMap.getUiSettings().setCompassEnabled(true);
-            mMap.getUiSettings().setIndoorLevelPickerEnabled(true);
-            mMap.getUiSettings().setZoomControlsEnabled(true);
+        mNormal.setOnClickListener(MapActivity.this);
+        mSatellite.setOnClickListener(MapActivity.this);
 
+        if (mMap != null && mData != null && mSearchType != null) {
             mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setCompassEnabled(true);
+            mMap.getUiSettings().setZoomControlsEnabled(false);
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
             mMap.setOnMapLongClickListener(MapActivity.this);
             mMap.setOnMarkerDragListener(MapActivity.this);
 
@@ -167,7 +174,9 @@ public class MapActivity extends BaseActivity implements
     }
 
     @Override
-    public void onMarkerDragStart(Marker marker) { }
+    public void onMarkerDragStart(Marker marker) {
+        marker.hideInfoWindow();
+    }
 
     @Override
     public void onMarkerDrag(Marker marker) { }
@@ -206,6 +215,28 @@ public class MapActivity extends BaseActivity implements
         startSearch();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.activity_map_type_normal: {
+                mNormal.setBackgroundResource(R.color.blue_dark);
+                mNormal.setTextColor(getResources().getColor(R.color.white));
+                mSatellite.setBackgroundResource(R.color.white);
+                mSatellite.setTextColor(getResources().getColor(R.color.blue_dark));
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
+            }
+            case R.id.activity_map_type_satellite: {
+                mSatellite.setBackgroundResource(R.color.blue_dark);
+                mSatellite.setTextColor(getResources().getColor(R.color.white));
+                mNormal.setBackgroundResource(R.color.white);
+                mNormal.setTextColor(getResources().getColor(R.color.blue_dark));
+                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                break;
+            }
+        }
+    }
+
 
     class CustomWindowInfoAdapter implements GoogleMap.InfoWindowAdapter {
         private final View mMyMarkerView;
@@ -226,23 +257,24 @@ public class MapActivity extends BaseActivity implements
         @Override
         public View getInfoContents(Marker marker) {
             if (TextUtils.isEmpty(mData.getAddress())) {
-                mAddress.setText("\u200F" + getString(R.string.text_address_not_found));
+                mAddress.setText(getString(R.string.text_address_not_found));
             }
             else {
                 mAddress.setText(mData.getAddress());
             }
 
             if (mData.getBlock() < 0  &&  mData.getSmooth() < 0) {
-                mBlock.setText("\u200F" + getString(R.string.text_cadastre_not_found));
+                mBlock.setText(getString(R.string.text_cadastre_not_found));
                 mSmooth.setVisibility(View.GONE);
             }
             else {
                 mSmooth.setVisibility(View.VISIBLE);
-                mBlock.setText("\u200F" + getString(R.string.text_block) + mData.getBlock());
-                mSmooth.setText("\u200F" + getString(R.string.text_smooth) + mData.getSmooth());
+                mBlock.setText(getString(R.string.text_block) + mData.getBlock());
+                mSmooth.setText(getString(R.string.text_smooth) + mData.getSmooth());
             }
             return mMyMarkerView;
         }
+//                "\u200F"
     }
 
 
@@ -265,7 +297,8 @@ public class MapActivity extends BaseActivity implements
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
         mMap.animateCamera(cameraUpdate);
 
-        mMarker = mMap.addMarker(new MarkerOptions().position(latLng));
+        mMarker = mMap.addMarker(new MarkerOptions().position(latLng).draggable(true));
+
         mMarker.showInfoWindow();
     }
 
@@ -323,7 +356,8 @@ public class MapActivity extends BaseActivity implements
     }
 
     protected void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, MapActivity.this);
+        if (mGoogleApiClient.isConnected())
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, MapActivity.this);
     }
 
 

@@ -6,23 +6,26 @@
     tools:context=".GeoNumberActivity">
 
     <EditText
-        android:id="@+id/etSmooth_AGN"
-        style="@style/SelectAddressEditTextStyle"
-        android:layout_centerInParent="true"
-        android:hint="@string/hint.smooth"
-        android:inputType="numberSigned"
-        android:imeOptions="actionSearch" />
-
-    <EditText
         android:id="@+id/etBlock_AGN"
         style="@style/SelectAddressEditTextStyle"
-        android:layout_above="@id/etSmooth_AGN"
         android:layout_centerHorizontal="true"
         android:hint="@string/hint.block"
+        android:imeOptions="actionNext"
         android:inputType="numberSigned"
-        android:imeOptions="actionNext">
-        <requestFocus/>
+        android:layout_marginTop="50dp">
+
+        <requestFocus />
     </EditText>
+
+    <EditText
+        android:id="@+id/etSmooth_AGN"
+        style="@style/SelectAddressEditTextStyle"
+        android:layout_below="@id/etBlock_AGN"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/hint.smooth"
+        android:imeOptions="actionSearch"
+        android:inputType="numberSigned" />
+
 
     <Button
         android:id="@+id/btnSearch_AGN"
@@ -30,7 +33,6 @@
         android:layout_below="@id/etSmooth_AGN"
         android:layout_centerHorizontal="true"
         android:text="@string/text.search" />
-
 
 
 </RelativeLayout>
