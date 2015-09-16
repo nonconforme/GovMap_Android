@@ -17,8 +17,8 @@
     <string name="text.ok">"אוקיי"</string>
     <string name="text.cancel">"לבטל"</string>
 
-    <string name="text.normal">Normal</string>
-    <string name="text.satellite">Satellite</string>
+    <string name="text.normal">"רחובות ומבנים"</string>
+    <string name="text.satellite">"תצלום אויר"</string>
 
     <string name="hint.city">"עיר"</string>
     <string name="hint.street">"רחוב"</string>

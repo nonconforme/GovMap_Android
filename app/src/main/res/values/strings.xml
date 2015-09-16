@@ -17,8 +17,8 @@
     <string name="text.ok">OK</string>
     <string name="text.cancel">Cancel</string>
 
-    <string name="text.normal">Normal</string>
-    <string name="text.satellite">Satellite</string>
+    <string name="text.normal">Standart Map</string>
+    <string name="text.satellite">Satellite Map</string>
 
     <string name="hint.city">City</string>
     <string name="hint.street">Street</string>

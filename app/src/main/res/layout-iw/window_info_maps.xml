@@ -8,8 +8,8 @@
         android:id="@+id/tv_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:gravity="left"
+        android:layout_gravity="right"
+        android:gravity="right"
         android:text="Medium Text"
         android:textSize="18sp" />
 
@@ -17,8 +17,8 @@
         android:id="@+id/tv_block"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:gravity="left"
+        android:layout_gravity="right"
+        android:gravity="right"
         android:text="Small Text"
         android:textSize="14sp" />
 
@@ -26,8 +26,8 @@
         android:id="@+id/tv_smooth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:gravity="left"
+        android:layout_gravity="right"
+        android:gravity="right"
         android:text="Small Text"
         android:textSize="14sp" />
 
