@@ -9,7 +9,7 @@
         android:id="@+id/etBlock_AGN"
         style="@style/SelectAddressEditTextStyle"
         android:layout_centerHorizontal="true"
-        android:gravity="left|center_vertical"
+        android:gravity="right|center_vertical"
         android:hint="@string/hint.block"
         android:imeOptions="actionNext"
         android:inputType="numberSigned"
@@ -22,7 +22,7 @@
         style="@style/SelectAddressEditTextStyle"
         android:layout_below="@id/etBlock_AGN"
         android:layout_centerHorizontal="true"
-        android:gravity="left|center_vertical"
+        android:gravity="right|center_vertical"
         android:hint="@string/hint.smooth"
         android:imeOptions="actionSearch"
         android:inputType="numberSigned" />

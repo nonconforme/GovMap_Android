@@ -202,7 +202,7 @@ public class MapActivity extends BaseActivity implements
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 //        notFoundAddress();
-        animateMapToLocation();
+//        animateMapToLocation();
     }
 
     @Override
@@ -223,7 +223,8 @@ public class MapActivity extends BaseActivity implements
                 mNormal.setTextColor(getResources().getColor(R.color.white));
                 mSatellite.setBackgroundResource(R.color.white);
                 mSatellite.setTextColor(getResources().getColor(R.color.blue_dark));
-                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                if (mMap.getMapType() != GoogleMap.MAP_TYPE_NORMAL)
+                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 break;
             }
             case R.id.activity_map_type_satellite: {
@@ -231,7 +232,8 @@ public class MapActivity extends BaseActivity implements
                 mSatellite.setTextColor(getResources().getColor(R.color.white));
                 mNormal.setBackgroundResource(R.color.white);
                 mNormal.setTextColor(getResources().getColor(R.color.blue_dark));
-                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                if (mMap.getMapType() != GoogleMap.MAP_TYPE_SATELLITE)
+                    mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                 break;
             }
         }
@@ -274,7 +276,6 @@ public class MapActivity extends BaseActivity implements
             }
             return mMyMarkerView;
         }
-//                "\u200F"
     }
 
 
@@ -305,7 +306,7 @@ public class MapActivity extends BaseActivity implements
     private void startSearch() {
         switch (mSearchType) {
             case ADDRESS: {
-                ((MainApplication) getApplication()).startSearchWithAddress(mData.getAddress());
+                sendGetCoordinatesRequest(mData.getAddress());
                 break;
             }
             case COORDINATES: {
@@ -383,8 +384,6 @@ public class MapActivity extends BaseActivity implements
 
                 if (NO_RESULT_FOUND_HE.equals(cadastre) || numbers.size() != 2) {
                     // no results found
-//                    notFoundCadastre();
-                    animateMapToLocation();
                 }
                 else {
                     // Get cadastre numbers
@@ -392,20 +391,17 @@ public class MapActivity extends BaseActivity implements
 
                     switch (mSearchType) {
                         case ADDRESS: {
-                            sendGetCoordinatesRequest(mData.getAddress());
                             break;
                         }
                         case COORDINATES: {
-                            animateMapToLocation();
                             break;
                         }
                         case CADASTRE: {
                             break;
                         }
                     }
-
-                    animateMapToLocation();
                 }
+                animateMapToLocation();
             }
 
             else
@@ -416,8 +412,7 @@ public class MapActivity extends BaseActivity implements
 
                 if (NO_RESULT_FOUND_HE.equals(address)) {
                     // no results found
-//                    notFoundAddress();
-                    animateMapToLocation();
+                    notGovMapReponse();
                 }
                 else {
                     // Get coordinates;
@@ -478,6 +473,7 @@ public class MapActivity extends BaseActivity implements
 
                 switch (mSearchType) {
                     case ADDRESS: {
+                        animateMapToLocation();
                         break;
                     }
                     case COORDINATES: {
@@ -485,19 +481,18 @@ public class MapActivity extends BaseActivity implements
                         break;
                     }
                     case CADASTRE: {
+                        animateMapToLocation();
                         break;
                     }
                 }
             }
             else {
-//                notFoundAddress();
                 animateMapToLocation();
             }
         }
 
         @Override
         public void failure(RetrofitError error) {
-//            notFoundAddress();
             animateMapToLocation();
         }
     }
@@ -511,16 +506,27 @@ public class MapActivity extends BaseActivity implements
                 mData.setLatitude(geocodeResponse.results.get(0).geometry.location.lat);
                 mData.setLongitude(geocodeResponse.results.get(0).geometry.location.lng);
 
-                animateMapToLocation();
+                switch (mSearchType) {
+                    case ADDRESS: {
+                        ((MainApplication) getApplication()).startSearchWithAddress(mData.getAddress());
+                        break;
+                    }
+                    case COORDINATES:  {
+                        animateMapToLocation();
+                        break;
+                    }
+                    case CADASTRE: {
+                        animateMapToLocation();
+                        break;
+                    }
+                }
             }
             else
-//                notFoundAddress();
                 animateMapToLocation();
         }
 
         @Override
         public void failure(RetrofitError error) {
-//            notFoundAddress();
             animateMapToLocation();
         }
     }
@@ -569,6 +575,26 @@ public class MapActivity extends BaseActivity implements
                 .create().show();
     }
 
-
+    private void notGovMapReponse() {
+        if (mProgressDialog != null && mProgressDialog.isShowing())
+            mProgressDialog.dismiss();
+        new AlertDialog.Builder(MapActivity.this)
+                .setMessage(R.string.message_connect_error)
+                .setPositiveButton(R.string.text_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        startSearch();
+                    }
+                })
+                .setNegativeButton(R.string.text_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(false)
+                .create().show();
+    }
 
 }

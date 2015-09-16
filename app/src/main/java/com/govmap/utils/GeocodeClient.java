@@ -33,7 +33,7 @@ public class GeocodeClient {
         RestAdapter.Builder builder = new RestAdapter.Builder()
                 .setEndpoint(API_LOBBY_URL)
                 .setClient(new OkClient(new OkHttpClient()))
-                .setLogLevel(RestAdapter.LogLevel.FULL);
+                .setLogLevel(RestAdapter.LogLevel.NONE);
 
         RestAdapter restAdapter = builder.build();
         REST_CLIENT_LOBBY = restAdapter.create(GeocodeApi.class);
