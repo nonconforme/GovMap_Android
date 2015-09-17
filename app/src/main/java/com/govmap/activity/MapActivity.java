@@ -271,8 +271,8 @@ public class MapActivity extends BaseActivity implements
             }
             else {
                 mSmooth.setVisibility(View.VISIBLE);
-                mBlock.setText(getString(R.string.text_block) + mData.getBlock());
-                mSmooth.setText(getString(R.string.text_smooth) + mData.getSmooth());
+                mBlock.setText(getString(R.string.text_lot) + mData.getBlock());
+                mSmooth.setText(getString(R.string.text_parcel) + mData.getSmooth());
             }
             return mMyMarkerView;
         }

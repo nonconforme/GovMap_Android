@@ -24,6 +24,7 @@ public class MainApplication extends Application {
     private final static String GOV_URL = "http://www.govmap.gov.il/";
 
     // Intents
+    public static final String ACTION_LOAD_ERROR = "com.govmap.load_error";
     public static final String ACTION_LOAD_PROGRESS = "com.govmap.load_progress";
     public static final String ACTION_FINISH_SPLASH = "com.govmap.finish_splash";
     public static final String ACTION_INNER_ADDRESS = "com.govmap.inner_address";
@@ -152,6 +153,13 @@ public class MainApplication extends Application {
     }
 
     private class GovWebClient extends WebViewClient {
+
+        @Override
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            if (errorCode == ERROR_CONNECT)
+                sendBroadcast(new Intent(ACTION_LOAD_ERROR));
+            super.onReceivedError(view, errorCode, description, failingUrl);
+        }
 
         @Override
         public void onPageFinished(WebView view, String url) {

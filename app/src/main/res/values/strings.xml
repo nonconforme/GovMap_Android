@@ -8,11 +8,11 @@
 
     <string name="text.search">Search</string>
 
-    <string name="text.block">"Block : "</string>
-    <string name="text.smooth">"Smooth : "</string>
+    <string name="text.lot">"Lot : "</string>
+    <string name="text.parcel">"Parcel : "</string>
 
     <string name="text.address_not_found">Address not found</string>
-    <string name="text.cadastre_not_found">Can\'t find Block &amp; Smooth</string>
+    <string name="text.cadastre_not_found">Can\'t find Lot &amp; Parcel</string>
 
     <string name="text.ok">OK</string>
     <string name="text.cancel">Cancel</string>
@@ -24,19 +24,19 @@
     <string name="hint.street">Street</string>
     <string name="hint.home">Home</string>
     
-    <string name="hint.block">Block</string>
-    <string name="hint.smooth">Smooth</string>
+    <string name="hint.lot">Lot</string>
+    <string name="hint.parcel">Parcel</string>
 
     <string name="action.waze">Open Waze</string>
 
     <string name="message.no_internet_connection">No internet connection. Do you want to try again?</string>
     <string name="message.connect_error">Error occurred while trying to connect to govmap. Trying again...</string>
     <string name="message.address_not_found">Address not found. Do you want to try again?</string>
-    <string name="message.cadastre_not_found">Can\'t find Block &amp; Smooth. Do you want to try again?</string>
+    <string name="message.cadastre_not_found">Can\'t find Lot &amp; Parcel. Do you want to try again?</string>
 
     <string name="title.main">Main Menu</string>
     <string name="title.select_address">Search By Address</string>
-    <string name="title.geonumbers">Search By Block &amp; Smooth</string>
+    <string name="title.geonumbers">Search By Lot &amp; Parcel</string>
     <string name="title.map"> </string>
     
     <string name="req_for_nubmer_format1" translatable="false">"גוש %s, חלקה %s"</string>

@@ -8,8 +8,8 @@
 
     <string name="text.search">"חיפוש"</string>
 
-    <string name="text.block">"‏בלוק : ‏‏"</string>
-    <string name="text.smooth">"‏חלקה : "‏‏‏‏‏</string>
+    <string name="text.lot">"‏בלוק : ‏‏"</string>
+    <string name="text.parcel">"‏חלקה : "‏‏‏‏‏</string>
 
     <string name="text.address_not_found">"כתובת לא נמצא"</string>
     <string name="text.cadastre_not_found">"לא ניתן למצוא גוש וחלקה"</string>
@@ -24,8 +24,8 @@
     <string name="hint.street">"רחוב"</string>
     <string name="hint.home">"בית"</string>
 
-    <string name="hint.block">"גוש"</string>
-    <string name="hint.smooth">"חלקה"</string>
+    <string name="hint.lot">"גוש"</string>
+    <string name="hint.parcel">"חלקה"</string>
 
     <string name="action.waze">"waze נווט באמצעות"</string>
 
