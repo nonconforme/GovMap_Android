@@ -100,7 +100,6 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
         intent.putExtra(MainApplication.EXTRA_DATA_OBJECT, mDataObject);
         intent.putExtra(MainApplication.EXTRA_DATA_SEARCH_TYPE, DataSearchType.CADASTRE.ordinal());
         startActivity(intent);
-        finish();
     }
 
 

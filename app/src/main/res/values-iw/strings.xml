@@ -2,9 +2,9 @@
 <resources>
     <string name="app_name">Relocate</string>
 
-    <string name="text.find_geo_number_using_address">איתור גוש וחלקה ע"ב כתובת</string>
-    <string name="text.find_geo_number_using_current_location">איתור גוש וחלקה ע"ב מיקום נוכחי</string>
-    <string name="text.find_address_using_geo_number">איתור כתובת ע"ב גוש וחלקה</string>
+    <string name="text.find_geo_number_using_address">"איתור גוש וחלקה ע\u0022ב כתובת"</string>
+    <string name="text.find_geo_number_using_current_location">"איתור גוש וחלקה ע\u0022ב מיקום נוכחי"</string>
+    <string name="text.find_address_using_geo_number">"איתור כתובת ע\u0022ב גוש וחלקה"</string>
 
     <string name="text.search">"חיפוש"</string>
 

@@ -113,7 +113,6 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
         intent.putExtra(MainApplication.EXTRA_DATA_OBJECT, mDataObject);
         intent.putExtra(MainApplication.EXTRA_DATA_SEARCH_TYPE, DataSearchType.ADDRESS.ordinal());
         startActivity(intent);
-        finish();
     }
 
 }
