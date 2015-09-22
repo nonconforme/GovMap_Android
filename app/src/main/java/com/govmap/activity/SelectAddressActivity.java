@@ -102,9 +102,11 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
         String street = etStreet.getText().toString();
         String home = etHome.getText().toString();
 
-        String addressString = String.format(getString(R.string.req_for_cadastre), city, home, street);
+        String addressSearchString = String.format(getString(R.string.req_for_cadastre), city, home, street);
+        String addressShowedString = String.format(getString(R.string.req_for_cadastre), city, street, home);
 
-        mDataObject.setAddress(addressString);
+        mDataObject.setSearchAddress(addressSearchString);
+        mDataObject.setShowedAddress(addressShowedString);
 
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(etHome.getWindowToken(), 0);

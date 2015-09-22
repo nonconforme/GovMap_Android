@@ -11,7 +11,8 @@ public class DataObject implements Parcelable {
 
     private int mBlock = -1;
     private int mSmooth = -1;
-    private String mAddress = "";
+    private String mSearchAddress = "";
+    private String mShowedAddress = "";
     private double mLatitude = Double.MAX_VALUE;
     private double mLongitude = Double.MAX_VALUE;
 
@@ -21,9 +22,10 @@ public class DataObject implements Parcelable {
     protected DataObject(Parcel in) {
         mBlock = in.readInt();
         mSmooth = in.readInt();
-        mAddress = in.readString();
+        mSearchAddress = in.readString();
         mLatitude = in.readDouble();
         mLongitude = in.readDouble();
+        mShowedAddress = in.readString();
     }
 
     @Override
@@ -35,9 +37,10 @@ public class DataObject implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mBlock);
         dest.writeInt(mSmooth);
-        dest.writeString(mAddress);
+        dest.writeString(mSearchAddress);
         dest.writeDouble(mLatitude);
         dest.writeDouble(mLongitude);
+        dest.writeString(mShowedAddress);
     }
 
     public static final Creator<DataObject> CREATOR = new Creator<DataObject>() {
@@ -65,12 +68,20 @@ public class DataObject implements Parcelable {
         this.mSmooth = smooth;
     }
 
-    public String getAddress() {
-        return mAddress;
+    public String getSearchAddress() {
+        return mSearchAddress;
     }
 
-    public void setAddress(String adress) {
-        this.mAddress = adress;
+    public void setSearchAddress(String adress) {
+        this.mSearchAddress = adress;
+    }
+
+    public String getShowedAddress() {
+        return mShowedAddress;
+    }
+
+    public void setShowedAddress(String adress) {
+        this.mShowedAddress = adress;
     }
 
     public double getLatitude() {
@@ -94,7 +105,7 @@ public class DataObject implements Parcelable {
         return "DataObject{" +
                 "mBlock='" + mBlock + '\'' +
                 ", mSmooth='" + mSmooth + '\'' +
-                ", mAddress='" + mAddress + '\'' +
+                ", mSearchAddress='" + mSearchAddress + '\'' +
                 ", mLatitude=" + mLatitude +
                 ", mLongitude=" + mLongitude +
                 '}';

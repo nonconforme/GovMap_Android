@@ -258,11 +258,11 @@ public class MapActivity extends BaseActivity implements
 
         @Override
         public View getInfoContents(Marker marker) {
-            if (TextUtils.isEmpty(mData.getAddress())) {
+            if (TextUtils.isEmpty(mData.getShowedAddress())) {
                 mAddress.setText(getString(R.string.text_address_not_found));
             }
             else {
-                mAddress.setText(mData.getAddress());
+                mAddress.setText(mData.getShowedAddress());
             }
 
             if (mData.getBlock() < 0  &&  mData.getSmooth() < 0) {
@@ -306,7 +306,7 @@ public class MapActivity extends BaseActivity implements
     private void startSearch() {
         switch (mSearchType) {
             case ADDRESS: {
-                sendGetCoordinatesRequest(mData.getAddress());
+                sendGetCoordinatesRequest(mData.getSearchAddress());
                 break;
             }
             case COORDINATES: {
@@ -416,8 +416,9 @@ public class MapActivity extends BaseActivity implements
                 }
                 else {
                     // Get coordinates;
-                    mData.setAddress(address);
-                    sendGetCoordinatesRequest(mData.getAddress());
+                    mData.setSearchAddress(address);
+                    mData.setShowedAddress(address);
+                    sendGetCoordinatesRequest(mData.getSearchAddress());
                 }
             }
         }
@@ -467,9 +468,10 @@ public class MapActivity extends BaseActivity implements
                 !TextUtils.isEmpty(street) &&
                 !TextUtils.isEmpty(home)) {
 
-                String addressString = String.format(getString(R.string.req_for_cadastre),
-                        city, home, street);
-                mData.setAddress(addressString);
+                String addressSearchString = String.format(getString(R.string.req_for_cadastre), city, home, street);
+                String addressShowedString = String.format(getString(R.string.req_for_cadastre), city, street, home);
+                mData.setSearchAddress(addressSearchString);
+                mData.setShowedAddress(addressShowedString);
 
                 switch (mSearchType) {
                     case ADDRESS: {
@@ -477,7 +479,7 @@ public class MapActivity extends BaseActivity implements
                         break;
                     }
                     case COORDINATES: {
-                        ((MainApplication) getApplication()).startSearchWithAddress(addressString);
+                        ((MainApplication) getApplication()).startSearchWithAddress(addressSearchString);
                         break;
                     }
                     case CADASTRE: {
@@ -508,7 +510,7 @@ public class MapActivity extends BaseActivity implements
 
                 switch (mSearchType) {
                     case ADDRESS: {
-                        ((MainApplication) getApplication()).startSearchWithAddress(mData.getAddress());
+                        ((MainApplication) getApplication()).startSearchWithAddress(mData.getSearchAddress());
                         break;
                     }
                     case COORDINATES:  {

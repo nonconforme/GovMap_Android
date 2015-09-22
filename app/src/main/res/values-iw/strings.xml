@@ -8,8 +8,8 @@
 
     <string name="text.search">"חיפוש"</string>
 
-    <string name="text.lot">"‏בלוק : ‏‏"</string>
-    <string name="text.parcel">"‏חלקה : "‏‏‏‏‏</string>
+    <string name="text.lot">"‏גוש : ‏‏"</string>
+    <string name="text.parcel">"חלקה : "‏‏‏‏‏</string>
 
     <string name="text.address_not_found">"כתובת לא נמצא"</string>
     <string name="text.cadastre_not_found">"לא ניתן למצוא גוש וחלקה"</string>
