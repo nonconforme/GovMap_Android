@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.govmap" >
+    package="com.govmap">
 
     <supports-screens
-        android:smallScreens="true"
-        android:normalScreens="true"
         android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
         android:xlargeScreens="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -24,11 +24,12 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activity.SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,17 +39,21 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/title.main"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.SelectAddressActivity"
             android:label="@string/title.select_address"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.GeoNumberActivity"
             android:label="@string/title.geonumbers"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.MapActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title.map"
             android:theme="@style/AppTheme" />
 

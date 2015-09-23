@@ -2,6 +2,7 @@ package com.govmap.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 
 import com.govmap.MainApplication;
@@ -59,12 +60,19 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void findGeoNumberByCurrentPosition() {
-        DataObject mDataObject = new DataObject();
 
-        Intent intent = new Intent(MainActivity.this, MapActivity.class);
-        intent.putExtra(MainApplication.EXTRA_DATA_OBJECT, mDataObject);
-        intent.putExtra(MainApplication.EXTRA_DATA_SEARCH_TYPE, DataSearchType.CURRENT_LOCATION.ordinal());
-        startActivity(intent);
+        if (isLocationServicesEnabled()) {
+            DataObject mDataObject = new DataObject();
+
+            Intent intent = new Intent(MainActivity.this, MapActivity.class);
+            intent.putExtra(MainApplication.EXTRA_DATA_OBJECT, mDataObject);
+            intent.putExtra(MainApplication.EXTRA_DATA_SEARCH_TYPE, DataSearchType.CURRENT_LOCATION.ordinal());
+            startActivity(intent);
+        }
+        else {
+            Intent locationMode = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(locationMode);
+        }
     }
 
 }

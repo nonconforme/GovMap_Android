@@ -549,6 +549,7 @@ public class MapActivity extends BaseActivity implements
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        finish();
                     }
                 })
                 .setCancelable(false)
@@ -571,6 +572,7 @@ public class MapActivity extends BaseActivity implements
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        finish();
                     }
                 })
                 .setCancelable(false)
@@ -593,6 +595,7 @@ public class MapActivity extends BaseActivity implements
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        finish();
                     }
                 })
                 .setCancelable(false)
