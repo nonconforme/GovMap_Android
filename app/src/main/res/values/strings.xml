@@ -35,7 +35,8 @@
     <string name="message.address_not_found">Address not found. Do you want to try again?</string>
     <string name="message.cadastre_not_found">Can\'t find Lot &amp; Parcel. Do you want to try again?</string>
 
-    <string name="title.main">Main Menu</string>
+    <!--<string name="title.main">Main Menu</string>-->
+    <string name="title.main"> </string>
     <string name="title.select_address">Search By Address</string>
     <string name="title.lot_parcel">Search By Lot &amp; Parcel</string>
     <string name="title.map"> </string>

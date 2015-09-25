@@ -1,6 +1,7 @@
 package com.govmap.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -23,7 +24,8 @@ import java.util.Locale;
  * Created by Misha on 9/1/2015.
  */
 public class MainActivity extends BaseActivity implements
-        View.OnClickListener {
+        View.OnClickListener,
+        CompoundButton.OnCheckedChangeListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,43 +51,17 @@ public class MainActivity extends BaseActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        ((SwitchCompat) menu.findItem(R.id.action_lang).getActionView().findViewById(R.id.action_lang_switch)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                String lang = getBaseContext().getResources().getConfiguration().locale.getLanguage();
-
-                Locale locale;
-                if (lang.equals("iw") || lang.equals("he")) {
-                    locale = new Locale("en", "US");
-                } else {
-                    locale = new Locale("iw", "IL");
-                }
-                Locale.setDefault(locale);
-
-                Configuration config = new Configuration();
-                config.locale = locale;
-
-                Resources res = getBaseContext().getResources();
-                DisplayMetrics displayMetrics = res.getDisplayMetrics();
-                res.updateConfiguration(config, displayMetrics);
-
-                Intent intent = new Intent(MainActivity.this, SplashActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        });
+        ((SwitchCompat) menu.findItem(R.id.action_lang).getActionView().findViewById(R.id.action_lang_switch))
+                .setOnCheckedChangeListener(MainActivity.this);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.action_lang) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -102,6 +78,38 @@ public class MainActivity extends BaseActivity implements
                 findGeoNumberByCurrentPosition();
                 break;
         }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        String lang = getBaseContext().getResources().getConfiguration().locale.getLanguage();
+
+        Locale locale;
+        if (lang.equals("iw") || lang.equals("he")) {
+            locale = new Locale("en", "US");
+        } else {
+            locale = new Locale("iw", "IL");
+        }
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.locale = locale;
+
+        Resources res = getBaseContext().getResources();
+        DisplayMetrics displayMetrics = res.getDisplayMetrics();
+        res.updateConfiguration(config, displayMetrics);
+
+        SharedPreferences.Editor editor = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE).edit();
+        editor.putString(KEY_LANG, locale.getLanguage());
+        editor.putString(KEY_COUNTRY, locale.getCountry());
+        editor.commit();
+
+        finish();
+        Intent intent = new Intent(MainActivity.this, SplashActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void findAddressByGeoNumber() {

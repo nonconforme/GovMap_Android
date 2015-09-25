@@ -30,7 +30,8 @@
     <string name="action.waze">"waze נווט באמצעות"</string>
     <string name="action.switch_lang">HE/EN</string>
 
-    <string name="title.main">"תפריט ראשי"</string>
+    <!--<string name="title.main">"תפריט ראשי"</string>-->
+    <string name="title.main"> </string>
     <string name="title.select_address">"חפש לפי כתובת"</string>
     <string name="title.lot_parcel">"חפש לפי מספרי גיא"</string>
     <string name="title.map"> </string>
