@@ -2,9 +2,9 @@
 
     <string name="app_name">Relocate</string>
 
-    <string name="text.find_geo_number_using_address">Find the geo number using address</string>
-    <string name="text.find_geo_number_using_current_location">Find the geo number using current location</string>
-    <string name="text.find_address_using_geo_number">Find the address using geo number</string>
+    <string name="text.find_lot_parcel_using_address">Find the lot &amp; parcel using address</string>
+    <string name="text.find_lot_parcel_using_current_location">Find the lot &amp; parcel using current location</string>
+    <string name="text.find_address_using_lot_parcel">Find the address using lot &amp; parcel</string>
 
     <string name="text.search">Search</string>
 
@@ -28,6 +28,7 @@
     <string name="hint.parcel">Parcel</string>
 
     <string name="action.waze">Open Waze</string>
+    <string name="action.switch_lang">EN/HE</string>
 
     <string name="message.no_internet_connection">No internet connection. Do you want to try again?</string>
     <string name="message.connect_error">Error occurred while trying to connect to govmap. Trying again...</string>
@@ -36,7 +37,7 @@
 
     <string name="title.main">Main Menu</string>
     <string name="title.select_address">Search By Address</string>
-    <string name="title.geonumbers">Search By Lot &amp; Parcel</string>
+    <string name="title.lot_parcel">Search By Lot &amp; Parcel</string>
     <string name="title.map"> </string>
     
     <string name="req_for_nubmer_format1" translatable="false">"גוש %s, חלקה %s"</string>

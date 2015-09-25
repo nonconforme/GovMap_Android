@@ -48,7 +48,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.GeoNumberActivity"
-            android:label="@string/title.geonumbers"
+            android:label="@string/title.lot_parcel"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity

@@ -2,9 +2,9 @@
 <resources>
     <string name="app_name">Relocate</string>
 
-    <string name="text.find_geo_number_using_address">"איתור גוש וחלקה ע\u0022ב כתובת"</string>
-    <string name="text.find_geo_number_using_current_location">"איתור גוש וחלקה ע\u0022ב מיקום נוכחי"</string>
-    <string name="text.find_address_using_geo_number">"איתור כתובת ע\u0022ב גוש וחלקה"</string>
+    <string name="text.find_lot_parcel_using_address">"איתור גוש וחלקה ע\u0022ב כתובת"</string>
+    <string name="text.find_lot_parcel_using_current_location">"איתור גוש וחלקה ע\u0022ב מיקום נוכחי"</string>
+    <string name="text.find_address_using_lot_parcel">"איתור כתובת ע\u0022ב גוש וחלקה"</string>
 
     <string name="text.search">"חיפוש"</string>
 
@@ -14,7 +14,7 @@
     <string name="text.address_not_found">"כתובת לא נמצא"</string>
     <string name="text.cadastre_not_found">"לא ניתן למצוא גוש וחלקה"</string>
 
-    <string name="text.ok">"אוקיי"</string>
+    <string name="text.ok">"אישור"</string>
     <string name="text.cancel">"לבטל"</string>
 
     <string name="text.normal">"רחובות ומבנים"</string>
@@ -28,10 +28,11 @@
     <string name="hint.parcel">"חלקה"</string>
 
     <string name="action.waze">"waze נווט באמצעות"</string>
+    <string name="action.switch_lang">HE/EN</string>
 
     <string name="title.main">"תפריט ראשי"</string>
     <string name="title.select_address">"חפש לפי כתובת"</string>
-    <string name="title.geonumbers">"חפש לפי מספרי גיא"</string>
+    <string name="title.lot_parcel">"חפש לפי מספרי גיא"</string>
     <string name="title.map"> </string>
 
 

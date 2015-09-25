@@ -4,11 +4,14 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+
+import com.govmap.MainApplication;
 
 /**
  * Created by MediumMG on 03.09.2015.
@@ -92,8 +95,8 @@ public class GovWebView extends WebView {
 
     @Override
     public void loadUrl(String url) {
-//        Log.v(MainApplication.TAG, "==========================================");
-//        Log.v(MainApplication.TAG, url + "");
+        Log.v(MainApplication.TAG, "==========================================");
+        Log.v(MainApplication.TAG, url + "");
         super.loadUrl(url);
     }
 }

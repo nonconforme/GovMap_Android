@@ -108,7 +108,7 @@ public class MapActivity extends BaseActivity implements
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-            mMap.setOnMapLongClickListener(MapActivity.this);
+//            mMap.setOnMapLongClickListener(MapActivity.this);
             mMap.setOnMarkerDragListener(MapActivity.this);
 
             mMap.setInfoWindowAdapter(new CustomWindowInfoAdapter());
@@ -278,7 +278,9 @@ public class MapActivity extends BaseActivity implements
         }
     }
 
-
+    private String clearAddress(String address) {
+        return address.replace("רחוב: ","").replace("בית: ","").replace("עיר: ", "").trim();
+    }
 
 
     private void animateMapToLocation() {
@@ -341,6 +343,7 @@ public class MapActivity extends BaseActivity implements
     }
 
     private void sendGetCoordinatesRequest(String address) {
+        address = clearAddress(address);
         GeocodeClient.get().getGeocodeByAddress(address.replace(" ", "+"), "iw", new GetCoordinatesCallback()) ;
     }
 
@@ -416,6 +419,8 @@ public class MapActivity extends BaseActivity implements
                 }
                 else {
                     // Get coordinates;
+                    address = clearAddress(address);
+
                     mData.setSearchAddress(address);
                     mData.setShowedAddress(address);
                     sendGetCoordinatesRequest(mData.getSearchAddress());

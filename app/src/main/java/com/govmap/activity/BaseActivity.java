@@ -58,8 +58,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void restoreData(Bundle data) {
         GovWebView webView = ((MainApplication) getApplication()).getWebView();
-        if (webView == null)
+        if (webView == null) {
             webView = new GovWebView(getApplication());
+        }
         webView.restoreState(data);
     }
 

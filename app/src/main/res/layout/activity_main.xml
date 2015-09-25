@@ -11,7 +11,7 @@
         style="@style/MainButtonStyle"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/text.find_address_using_geo_number"
+        android:text="@string/text.find_address_using_lot_parcel"
         android:layout_marginBottom="30dp"/>
 
     <Button
@@ -20,7 +20,7 @@
         android:layout_above="@id/btnFindAddressByGeoNumber_AM"
         android:layout_alignLeft="@id/btnFindAddressByGeoNumber_AM"
         android:layout_alignStart="@id/btnFindAddressByGeoNumber_AM"
-        android:text="@string/text.find_geo_number_using_current_location" />
+        android:text="@string/text.find_lot_parcel_using_current_location" />
 
     <Button
         android:id="@+id/btnFindGeoNumberByAddress_AM"
@@ -28,7 +28,7 @@
         android:layout_above="@id/btnFindGeoNumberByCurPos_AM"
         android:layout_alignLeft="@id/btnFindAddressByGeoNumber_AM"
         android:layout_alignStart="@id/btnFindAddressByGeoNumber_AM"
-        android:text="@string/text.find_geo_number_using_address" />
+        android:text="@string/text.find_lot_parcel_using_address" />
 
     <TextView
         android:id="@+id/txt_Relocate_AM"
