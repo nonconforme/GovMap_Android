@@ -411,18 +411,34 @@ public class MapActivity extends BaseActivity implements
             if  (MainApplication.ACTION_INNER_ADDRESS.equals(intent.getAction())) {
                 ((MainApplication) getApplication()).clearResults();
 
-                String address = intent.getStringExtra(MainApplication.EXTRA_DATA_ADDRESS);
+                String addressResult = intent.getStringExtra(MainApplication.EXTRA_DATA_ADDRESS);
 
-                if (NO_RESULT_FOUND_HE.equals(address)) {
+                if (NO_RESULT_FOUND_HE.equals(addressResult)) {
                     // no results found
                     notGovMapReponse();
                 }
                 else {
-                    // Get coordinates;
-                    address = clearAddress(address);
+                    // Parse result from govmap
+                    String showedAddresses = "";
+                    String[] addresses = addressResult.replace("\t", "").split("\n");
+                    for (int i = 0; i < addresses.length; i++) {
+                        String[] values = addresses[i].split(",");
+                        String city = "", street = "", home = "";
+                        for (int j = 0; j < values.length; j++) {
+                            if (values[j].contains("עיר"))
+                                city = values[j].replace("עיר:", "").trim();
+                            if (values[j].contains("רחוב"))
+                                street = values[j].replace("רחוב:", "").trim();
+                            if (values[j].contains("בית"))
+                                home = values[j].replace("בית:", "").trim();
+                        }
+                        addresses[i] = String.format(getString(R.string.req_for_cadastre), city, street, home);
+                        showedAddresses += (i == addresses.length - 1) ?  addresses[i] : addresses[i]+"\n";
+                    }
+                    showedAddresses.trim();
 
-                    mData.setSearchAddress(address);
-                    mData.setShowedAddress(address);
+                    mData.setSearchAddress(addresses[0]);
+                    mData.setShowedAddress(showedAddresses);
                     sendGetCoordinatesRequest(mData.getSearchAddress());
                 }
             }

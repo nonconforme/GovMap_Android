@@ -30,17 +30,15 @@
     <string name="action.waze">"waze נווט באמצעות"</string>
     <string name="action.switch_lang">HE/EN</string>
 
-    <!--<string name="title.main">"תפריט ראשי"</string>-->
-    <string name="title.main"> </string>
+    <string name="title.main">"תפריט ראשי"</string>
     <string name="title.select_address">"חפש לפי כתובת"</string>
     <string name="title.lot_parcel">"חפש לפי מספרי גיא"</string>
     <string name="title.map"> </string>
-
 
     <string name="message.no_internet_connection">"אין חיבור לאינטרנט .האם אתה רוצה לנסות שוב?"</string>
     <string name="message.connect_error">"אירעה שגיאה בעת הניסיון להתחבר לgovmap. מנסה שוב..."</string>
     <string name="message.address_not_found">"כתובת לא נמצא .האם אתה רוצה לנסות שוב?"</string>
     <string name="message.cadastre_not_found">"לא יכול למצוא גוש ו חלקה .האם אתה רוצה לנסות שוב?"</string>
-
+    <string name="message.change_locale">"התוכנה תסגר, כדי ששינוי ספה יכנס לתוקף הפעל תוכנה מחדש."</string>
 
 </resources>

@@ -45,7 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         String lang = sp.getString(KEY_LANG, "");
         String country = sp.getString(KEY_COUNTRY, "");
         if (!TextUtils.isEmpty(lang) && !TextUtils.isEmpty(country)) {
-            Locale locale = new Locale(lang,country);
+            Locale locale = new Locale(lang, country);
             Locale.setDefault(locale);
 
             Configuration config = new Configuration();

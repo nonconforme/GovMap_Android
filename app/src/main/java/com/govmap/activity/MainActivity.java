@@ -1,11 +1,13 @@
 package com.govmap.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -26,6 +28,8 @@ import java.util.Locale;
 public class MainActivity extends BaseActivity implements
         View.OnClickListener,
         CompoundButton.OnCheckedChangeListener {
+
+    private SwitchCompat mSwitchCompat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +55,9 @@ public class MainActivity extends BaseActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        ((SwitchCompat) menu.findItem(R.id.action_lang).getActionView().findViewById(R.id.action_lang_switch))
-                .setOnCheckedChangeListener(MainActivity.this);
+        mSwitchCompat = (SwitchCompat) menu.findItem(R.id.action_lang).getActionView().findViewById(R.id.action_lang_switch);
+        mSwitchCompat.setChecked(false);
+        mSwitchCompat.setOnCheckedChangeListener(MainActivity.this);
         return true;
     }
 
@@ -82,34 +87,8 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        String lang = getBaseContext().getResources().getConfiguration().locale.getLanguage();
-
-        Locale locale;
-        if (lang.equals("iw") || lang.equals("he")) {
-            locale = new Locale("en", "US");
-        } else {
-            locale = new Locale("iw", "IL");
-        }
-        Locale.setDefault(locale);
-
-        Configuration config = new Configuration();
-        config.locale = locale;
-
-        Resources res = getBaseContext().getResources();
-        DisplayMetrics displayMetrics = res.getDisplayMetrics();
-        res.updateConfiguration(config, displayMetrics);
-
-        SharedPreferences.Editor editor = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE).edit();
-        editor.putString(KEY_LANG, locale.getLanguage());
-        editor.putString(KEY_COUNTRY, locale.getCountry());
-        editor.commit();
-
-        finish();
-        Intent intent = new Intent(MainActivity.this, SplashActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        if (isChecked)
+            showChangeLocale();
     }
 
     private void findAddressByGeoNumber() {
@@ -121,7 +100,6 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void findGeoNumberByCurrentPosition() {
-
         if (isLocationServicesEnabled()) {
             DataObject mDataObject = new DataObject();
 
@@ -134,6 +112,49 @@ public class MainActivity extends BaseActivity implements
             Intent locationMode = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(locationMode);
         }
+    }
+
+    private void showChangeLocale() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setMessage(R.string.message_change_locale)
+                .setPositiveButton(R.string.text_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String lang = getBaseContext().getResources().getConfiguration().locale.getLanguage();
+
+                        Locale locale;
+                        if (lang.equals("iw") || lang.equals("he")) {
+                            locale = new Locale("en", "US");
+                        } else {
+                            locale = new Locale("iw", "IL");
+                        }
+                        Locale.setDefault(locale);
+
+                        Configuration config = new Configuration();
+                        config.locale = locale;
+
+                        Resources res = getBaseContext().getResources();
+                        DisplayMetrics displayMetrics = res.getDisplayMetrics();
+                        res.updateConfiguration(config, displayMetrics);
+
+                        SharedPreferences.Editor editor = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE).edit();
+                        editor.putString(KEY_LANG, locale.getLanguage());
+                        editor.putString(KEY_COUNTRY, locale.getCountry());
+                        editor.commit();
+
+                        dialog.dismiss();
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.text_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        mSwitchCompat.setChecked(!mSwitchCompat.isChecked());
+                    }
+                })
+                .setCancelable(false)
+                .create().show();
     }
 
 }
