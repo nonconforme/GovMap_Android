@@ -39,8 +39,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             restoreData(savedInstanceState);
         }
-        super.onCreate(savedInstanceState);
-
         SharedPreferences sp = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
         String lang = sp.getString(KEY_LANG, "");
         String country = sp.getString(KEY_COUNTRY, "");
@@ -55,6 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             DisplayMetrics displayMetrics = res.getDisplayMetrics();
             res.updateConfiguration(config, displayMetrics);
         }
+        super.onCreate(savedInstanceState);
 
         wvGov = ((MainApplication) getApplication()).getWebView();
     }

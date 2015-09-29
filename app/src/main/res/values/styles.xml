@@ -2,6 +2,8 @@
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:screenOrientation">portrait</item>
+        <item name="colorPrimary">@color/blue.light</item>
+        <item name="colorPrimaryDark">@color/blue.dark</item>
     </style>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">

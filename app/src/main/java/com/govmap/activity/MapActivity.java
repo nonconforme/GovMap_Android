@@ -124,6 +124,9 @@ public class MapActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
 
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(getResources().getString(R.string.title_map));
+
         mReceiver = new MapReceiver();
         IntentFilter intentFilter = new IntentFilter(MainApplication.ACTION_INNER_CADASTRE);
         intentFilter.addAction(MainApplication.ACTION_INNER_ADDRESS);
@@ -423,14 +426,15 @@ public class MapActivity extends BaseActivity implements
                     String[] addresses = addressResult.replace("\t", "").split("\n");
                     for (int i = 0; i < addresses.length; i++) {
                         String[] values = addresses[i].split(",");
+
                         String city = "", street = "", home = "";
                         for (int j = 0; j < values.length; j++) {
-                            if (values[j].contains("עיר"))
-                                city = values[j].replace("עיר:", "").trim();
-                            if (values[j].contains("רחוב"))
-                                street = values[j].replace("רחוב:", "").trim();
-                            if (values[j].contains("בית"))
-                                home = values[j].replace("בית:", "").trim();
+                            if (values[j].contains("עיר:"))
+                                city = values[j].replace("רחוב:","").replace("בית:","").replace("עיר:", "").trim();
+                            if (values[j].contains("רחוב:"))
+                                street = values[j].replace("רחוב:","").replace("בית:","").replace("עיר:", "").trim();
+                            if (values[j].contains("בית:"))
+                                home = values[j].replace("רחוב:","").replace("בית:","").replace("עיר:", "").trim();
                         }
                         addresses[i] = String.format(getString(R.string.req_for_cadastre), city, street, home);
                         showedAddresses += (i == addresses.length - 1) ?  addresses[i] : addresses[i]+"\n";

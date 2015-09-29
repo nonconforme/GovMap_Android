@@ -40,13 +40,15 @@ public class MainApplication extends Application {
     public static final String EXTRA_DATA_OBJECT = "data_object";
     public static final String EXTRA_DATA_SEARCH_TYPE = "data_type";
 
-
     // Search
-    private static final int TIME_FIND = 1000;
+    private static final int TIME_FIND = 2000;
+
     private static final int TIME_INNERTEXT_FOR_ADDRESS = 1000;
+    private static final int MAX_ATTEMPTS_ADDRESS = 9;
+
     private static final int TIME_INNERTEXT_FOR_CADASTRE = 3000;
-    private static final int MAX_ATTEMPTS_ADDRESS = 10;
-    private static final int MAX_ATTEMPTS_CADASTRE = 4;
+    private static final int MAX_ATTEMPTS_CADASTRE = 3;
+
     private int attemptCount = 0;
 
     private Handler mHandler = new Handler();

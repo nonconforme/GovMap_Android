@@ -43,14 +43,17 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
 
         findViewById(R.id.btnFind_ASA).setOnClickListener(this);
 
-//        etCity.setText("הרצל");
-//        etStreet.setText("ראשון לציון");
-//        etHome.setText("74");
+//        etCity.setText("ראשון לציון");
+//        etStreet.setText("הנחשול");
+//        etHome.setText("40");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(getResources().getString(R.string.title_select_address));
     }
 
     @Override

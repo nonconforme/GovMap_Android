@@ -45,6 +45,8 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(getResources().getString(R.string.title_main));
     }
 
     @Override
@@ -56,6 +58,7 @@ public class MainActivity extends BaseActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         mSwitchCompat = (SwitchCompat) menu.findItem(R.id.action_lang).getActionView().findViewById(R.id.action_lang_switch);
+        mSwitchCompat.setText(getResources().getString(R.string.action_switch_lang));
         mSwitchCompat.setChecked(false);
         mSwitchCompat.setOnCheckedChangeListener(MainActivity.this);
         return true;

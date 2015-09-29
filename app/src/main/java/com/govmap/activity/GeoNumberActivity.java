@@ -47,6 +47,8 @@ public class GeoNumberActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(getResources().getString(R.string.title_lot_parcel));
     }
 
     @Override

@@ -23,5 +23,6 @@ public class GovProgressDialog extends ProgressDialog {
     public void show() {
         super.show();
         setContentView(R.layout.dialog_loading);
+        setCancelable(false);
     }
 }

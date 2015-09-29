@@ -33,8 +33,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="right|center_vertical"
         android:hint="@string/hint.home"
-        android:imeOptions="actionSearch"
-        android:inputType="numberSigned"/>
+        android:imeOptions="actionSearch"/>
 
 
     <Button
