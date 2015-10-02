@@ -142,6 +142,12 @@ public class MapActivity extends BaseActivity implements
     }
 
     @Override
+    protected void onDestroy() {
+        ((MainApplication) getApplication()).clearHandlers();
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_map, menu);
         return true;
@@ -377,7 +383,6 @@ public class MapActivity extends BaseActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
             if (MainApplication.ACTION_INNER_CADASTRE.equals(intent.getAction())) {
-                ((MainApplication) getApplication()).clearResults();
 
                 String cadastre = intent.getStringExtra(MainApplication.EXTRA_DATA_CADASTRE);
 
@@ -412,7 +417,6 @@ public class MapActivity extends BaseActivity implements
 
             else
             if  (MainApplication.ACTION_INNER_ADDRESS.equals(intent.getAction())) {
-                ((MainApplication) getApplication()).clearResults();
 
                 String addressResult = intent.getStringExtra(MainApplication.EXTRA_DATA_ADDRESS);
 
@@ -453,6 +457,11 @@ public class MapActivity extends BaseActivity implements
 
         @Override
         public void success(GeocodeResponse geocodeResponse, Response response) {
+            if (MapActivity.this.isFinishing()) {
+                Log.v(MainApplication.TAG, "isFinishing");
+                return;
+            }
+
             String city = "", street = "", home = "";
 
             for (Result result : geocodeResponse.results) {
@@ -520,6 +529,11 @@ public class MapActivity extends BaseActivity implements
 
         @Override
         public void failure(RetrofitError error) {
+            if (MapActivity.this.isFinishing()) {
+                Log.v(MainApplication.TAG, "isFinishing");
+                return;
+            }
+
             animateMapToLocation();
         }
     }
@@ -529,6 +543,10 @@ public class MapActivity extends BaseActivity implements
         @Override
         public void success(GeocodeResponse geocodeResponse, Response response) {
             if (geocodeResponse.results.size() > 0) {
+                if (MapActivity.this.isFinishing()) {
+                    Log.v(MainApplication.TAG, "isFinishing");
+                    return;
+                }
 
                 mData.setLatitude(geocodeResponse.results.get(0).geometry.location.lat);
                 mData.setLongitude(geocodeResponse.results.get(0).geometry.location.lng);
@@ -554,6 +572,11 @@ public class MapActivity extends BaseActivity implements
 
         @Override
         public void failure(RetrofitError error) {
+            if (MapActivity.this.isFinishing()) {
+                Log.v(MainApplication.TAG, "isFinishing");
+                return;
+            }
+
             animateMapToLocation();
         }
     }

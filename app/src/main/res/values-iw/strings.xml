@@ -39,6 +39,6 @@
     <string name="message.connect_error">"אירעה שגיאה בעת הניסיון להתחבר לgovmap. מנסה שוב..."</string>
     <string name="message.address_not_found">"כתובת לא נמצא .האם אתה רוצה לנסות שוב?"</string>
     <string name="message.cadastre_not_found">"לא יכול למצוא גוש ו חלקה .האם אתה רוצה לנסות שוב?"</string>
-    <string name="message.change_locale">"התוכנה תסגר, כדי ששינוי ספה יכנס לתוקף הפעל תוכנה מחדש."</string>
+    <string name="message.change_locale">"הגדרה תיכנס לתוקף לאחר ההפעלה מחדש של יישום"</string>
 
 </resources>
