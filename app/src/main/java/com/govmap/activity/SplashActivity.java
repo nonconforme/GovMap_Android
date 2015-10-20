@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 
 import com.govmap.MainApplication;
 import com.govmap.R;
+import com.govmap.utils.AppPreferences;
 
 
 public class SplashActivity extends BaseActivity {
@@ -88,7 +89,9 @@ public class SplashActivity extends BaseActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (MainApplication.ACTION_FINISH_SPLASH.equals(intent.getAction())) {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                boolean isTCshowed = AppPreferences.getBoolean(SplashActivity.this, AppPreferences.KEY_IS_TC_SHOWED);
+
+                startActivity(new Intent(SplashActivity.this, isTCshowed ? MainActivity.class : TCActivity.class));
                 finish();
             }
             else

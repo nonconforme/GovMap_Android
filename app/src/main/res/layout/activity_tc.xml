@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginBottom="10dp">
+
+    <Button
+        android:id="@+id/activity_tc_main_menu"
+        style="@style/SmallButtonStyle"
+        android:layout_margin="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/title.main" />
+
+    <CheckBox
+        android:id="@+id/activity_tc_agree"
+        android:layout_above="@id/activity_tc_main_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/text.agree_tc"
+        android:textSize="14sp" />
+
+    <ScrollView
+        android:layout_above="@id/activity_tc_agree"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/activity_tc_relocate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/app_name"
+                android:textColor="@color/blue.light"
+                android:textSize="24sp"
+                android:layout_margin="5dp"/>
+
+            <TextView
+                android:id="@+id/activity_tc_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/text.tc"
+                android:textColor="@color/blue.light"
+                android:textSize="16sp"
+                android:layout_margin="5dp"/>
+
+            <TextView
+                android:id="@+id/activity_tc_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="temp"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

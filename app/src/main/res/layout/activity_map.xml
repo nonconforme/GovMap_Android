@@ -10,7 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:paddingTop="1dp"
+        android:orientation="horizontal"
+        android:layoutDirection="locale"
+        android:background="@color/blue.dark">
 
         <TextView
             android:id="@+id/activity_map_type_normal"
@@ -28,11 +31,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
             android:gravity="center"
             android:background="@color/white"
             android:textColor="@color/blue.dark"
             android:textSize="12sp"
             android:text="@string/text.satellite"/>
+
+        <TextView
+            android:id="@+id/activity_map_type_govmap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@color/white"
+            android:textColor="@color/blue.dark"
+            android:textSize="12sp"
+            android:text="@string/text.govmap"/>
 
     </LinearLayout>
 
@@ -42,5 +58,13 @@
         class="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/activity_map_frame_govmap"
+        android:layout_above="@id/activity_map_types"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@android:color/white"/>
 
 </RelativeLayout>

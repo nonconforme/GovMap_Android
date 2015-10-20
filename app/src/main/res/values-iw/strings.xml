@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Relocate</string>
 
+    <string name="text.agree_tc">"כן, אני מסכים עם תנאי שימוש"</string>
+    <string name="text.tc">"תנאי שימוש"</string>
+
     <string name="text.find_lot_parcel_using_address">"איתור גוש וחלקה ע\u0022ב כתובת"</string>
     <string name="text.find_lot_parcel_using_current_location">"איתור גוש וחלקה ע\u0022ב מיקום נוכחי"</string>
     <string name="text.find_address_using_lot_parcel">"איתור כתובת ע\u0022ב גוש וחלקה"</string>
@@ -10,15 +13,18 @@
 
     <string name="text.lot">"‏גוש : ‏‏"</string>
     <string name="text.parcel">"חלקה : "‏‏‏‏‏</string>
+    <string name="text.lot_parcel">"גוש %s חלקה %s"</string>
 
     <string name="text.address_not_found">"כתובת לא נמצא"</string>
     <string name="text.cadastre_not_found">"לא ניתן למצוא גוש וחלקה"</string>
 
     <string name="text.ok">"אישור"</string>
     <string name="text.cancel">"לבטל"</string>
+    <string name="text.go_to_setting">"עבור להגדרות"</string>
 
     <string name="text.normal">"רחובות ומבנים"</string>
     <string name="text.satellite">"תצלום אויר"</string>
+    <string name="text.govmap">Gov Map</string>
 
     <string name="hint.city">"עיר"</string>
     <string name="hint.street">"רחוב"</string>
@@ -40,5 +46,6 @@
     <string name="message.address_not_found">"כתובת לא נמצא .האם אתה רוצה לנסות שוב?"</string>
     <string name="message.cadastre_not_found">"לא יכול למצוא גוש ו חלקה .האם אתה רוצה לנסות שוב?"</string>
     <string name="message.change_locale">"הגדרה תיכנס לתוקף לאחר ההפעלה מחדש של יישום"</string>
+    <string name="message.no_gps">"שירותי איתור מיקום מבוטלים, כדי להשתמש באפליקציה אנא הפעל"</string>
 
 </resources>

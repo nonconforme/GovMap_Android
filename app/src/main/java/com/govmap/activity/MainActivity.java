@@ -112,8 +112,23 @@ public class MainActivity extends BaseActivity implements
             startActivity(intent);
         }
         else {
-            Intent locationMode = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(locationMode);
+            new AlertDialog.Builder(MainActivity.this)
+                    .setMessage(R.string.message_no_gps)
+                    .setPositiveButton(R.string.text_go_to_setting, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent locationMode = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivity(locationMode);
+                        }
+                    })
+                    .setNegativeButton(R.string.text_cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setCancelable(false)
+                    .create().show();
         }
     }
 

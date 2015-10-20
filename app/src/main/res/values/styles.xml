@@ -4,12 +4,14 @@
         <item name="android:screenOrientation">portrait</item>
         <item name="colorPrimary">@color/blue.light</item>
         <item name="colorPrimaryDark">@color/blue.dark</item>
+        <item name="colorAccent">@color/blue.light</item>
     </style>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:screenOrientation">portrait</item>
         <item name="colorPrimary">@color/blue.light</item>
         <item name="colorPrimaryDark">@color/blue.dark</item>
+        <item name="colorAccent">@color/blue.light</item>
     </style>
 
     <style name="SelectAddressEditTextStyle" parent="Base.V12.Widget.AppCompat.EditText">

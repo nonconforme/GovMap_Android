@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -67,7 +68,8 @@ public class MapActivity extends BaseActivity implements
     private GovProgressDialog mProgressDialog;
 
     private GoogleMap mMap;
-    private TextView mNormal, mSatellite;
+    private TextView mNormal, mSatellite, mGovmap;
+    private FrameLayout mGovmapFrame;
 
     private DataObject mData;
     private DataSearchType mSearchType;
@@ -86,8 +88,14 @@ public class MapActivity extends BaseActivity implements
         mSearchType = DataSearchType.getEnum(getIntent().getIntExtra(MainApplication.EXTRA_DATA_SEARCH_TYPE, -1));
 
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.activity_map_fragment)).getMap();
+
+        mGovmapFrame = (FrameLayout)findViewById(R.id.activity_map_frame_govmap);
+        mGovmapFrame.setVisibility(View.GONE);
+        mGovmapFrame.addView(wvGov);
+
         mNormal = (TextView) findViewById(R.id.activity_map_type_normal);
         mSatellite = (TextView) findViewById(R.id.activity_map_type_satellite);
+        mGovmap = (TextView) findViewById(R.id.activity_map_type_govmap);
 
         mProgressDialog = new GovProgressDialog(MapActivity.this);
 
@@ -100,6 +108,7 @@ public class MapActivity extends BaseActivity implements
 
         mNormal.setOnClickListener(MapActivity.this);
         mSatellite.setOnClickListener(MapActivity.this);
+        mGovmap.setOnClickListener(MapActivity.this);
 
         if (mMap != null && mData != null && mSearchType != null) {
             mMap.setMyLocationEnabled(true);
@@ -143,6 +152,7 @@ public class MapActivity extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
+        mGovmapFrame.removeView(wvGov);
         ((MainApplication) getApplication()).clearHandlers();
         super.onDestroy();
     }
@@ -159,6 +169,9 @@ public class MapActivity extends BaseActivity implements
 
         if (id == R.id.action_settings) {
             try {
+                if (mData ==  null)
+                    return true;
+
                 String url = String.format("waze://?ll=%s,%s&navigate=yes", String.valueOf(mData.getLatitude()), String.valueOf(mData.getLongitude()));
                 Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse(url) );
                 startActivity(intent);
@@ -230,8 +243,14 @@ public class MapActivity extends BaseActivity implements
             case R.id.activity_map_type_normal: {
                 mNormal.setBackgroundResource(R.color.blue_dark);
                 mNormal.setTextColor(getResources().getColor(R.color.white));
+
                 mSatellite.setBackgroundResource(R.color.white);
                 mSatellite.setTextColor(getResources().getColor(R.color.blue_dark));
+
+                mGovmap.setBackgroundResource(R.color.white);
+                mGovmap.setTextColor(getResources().getColor(R.color.blue_dark));
+
+                mGovmapFrame.setVisibility(View.GONE);
                 if (mMap.getMapType() != GoogleMap.MAP_TYPE_NORMAL)
                     mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 break;
@@ -239,25 +258,44 @@ public class MapActivity extends BaseActivity implements
             case R.id.activity_map_type_satellite: {
                 mSatellite.setBackgroundResource(R.color.blue_dark);
                 mSatellite.setTextColor(getResources().getColor(R.color.white));
+
                 mNormal.setBackgroundResource(R.color.white);
                 mNormal.setTextColor(getResources().getColor(R.color.blue_dark));
+
+                mGovmap.setBackgroundResource(R.color.white);
+                mGovmap.setTextColor(getResources().getColor(R.color.blue_dark));
+
+                mGovmapFrame.setVisibility(View.GONE);
                 if (mMap.getMapType() != GoogleMap.MAP_TYPE_SATELLITE)
                     mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                 break;
             }
+            case R.id.activity_map_type_govmap: {
+                mGovmap.setBackgroundResource(R.color.blue_dark);
+                mGovmap.setTextColor(getResources().getColor(R.color.white));
+
+                mNormal.setBackgroundResource(R.color.white);
+                mNormal.setTextColor(getResources().getColor(R.color.blue_dark));
+
+                mSatellite.setBackgroundResource(R.color.white);
+                mSatellite.setTextColor(getResources().getColor(R.color.blue_dark));
+
+                mGovmapFrame.setVisibility(View.VISIBLE);
+
+            }
+
         }
     }
 
 
     class CustomWindowInfoAdapter implements GoogleMap.InfoWindowAdapter {
         private final View mMyMarkerView;
-        private final TextView mAddress, mBlock, mSmooth;
+        private final TextView mAddress, mBlockSmooth;
 
         public CustomWindowInfoAdapter() {
             mMyMarkerView = getLayoutInflater().inflate(R.layout.window_info_maps, null);
             mAddress = (TextView) mMyMarkerView.findViewById(R.id.tv_address);
-            mBlock = (TextView) mMyMarkerView.findViewById(R.id.tv_block);
-            mSmooth = (TextView) mMyMarkerView.findViewById(R.id.tv_smooth);
+            mBlockSmooth = (TextView) mMyMarkerView.findViewById(R.id.tv_block_smooth);
         }
 
         @Override
@@ -274,14 +312,15 @@ public class MapActivity extends BaseActivity implements
                 mAddress.setText(mData.getShowedAddress());
             }
 
-            if (mData.getBlock() < 0  &&  mData.getSmooth() < 0) {
-                mBlock.setText(getString(R.string.text_cadastre_not_found));
-                mSmooth.setVisibility(View.GONE);
+            if (mData.getLot() < 0  &&  mData.getParcel() < 0) {
+                mBlockSmooth.setText(getString(R.string.text_cadastre_not_found));
             }
             else {
-                mSmooth.setVisibility(View.VISIBLE);
-                mBlock.setText(getString(R.string.text_lot) + mData.getBlock());
-                mSmooth.setText(getString(R.string.text_parcel) + mData.getSmooth());
+                String cadastralString = String.format(getString(R.string.text_lot_parcel),
+                        String.valueOf(mData.getLot()),
+                        String.valueOf(mData.getParcel()));
+
+                mBlockSmooth.setText(cadastralString);
             }
             return mMyMarkerView;
         }
@@ -325,9 +364,9 @@ public class MapActivity extends BaseActivity implements
                 break;
             }
             case CADASTRE: {
-                String cadastralString = String.format(getString(R.string.req_for_nubmer_format1),
-                        String.valueOf(mData.getBlock()),
-                        String.valueOf(mData.getSmooth()));
+                String cadastralString = String.format(getString(R.string.req_for_nubmer_format),
+                        String.valueOf(mData.getLot()),
+                        String.valueOf(mData.getParcel()));
                 ((MainApplication) getApplication()).startSearchWihCadastre(cadastralString);
                 break;
             }
@@ -440,7 +479,7 @@ public class MapActivity extends BaseActivity implements
                             if (values[j].contains("בית:"))
                                 home = values[j].replace("רחוב:","").replace("בית:","").replace("עיר:", "").trim();
                         }
-                        addresses[i] = String.format(getString(R.string.req_for_cadastre), city, street, home);
+                        addresses[i] = String.format(getString(R.string.req_for_cadastre), city, home, street);
                         showedAddresses += (i == addresses.length - 1) ?  addresses[i] : addresses[i]+"\n";
                     }
                     showedAddresses.trim();
@@ -503,7 +542,7 @@ public class MapActivity extends BaseActivity implements
                 !TextUtils.isEmpty(home)) {
 
                 String addressSearchString = String.format(getString(R.string.req_for_cadastre), city, home, street);
-                String addressShowedString = String.format(getString(R.string.req_for_cadastre), city, street, home);
+                String addressShowedString = String.format(getString(R.string.req_for_cadastre), city, home, street);
                 mData.setSearchAddress(addressSearchString);
                 mData.setShowedAddress(addressShowedString);
 

@@ -2,6 +2,9 @@
 
     <string name="app_name">Relocate</string>
 
+    <string name="text.agree_tc">Yes, I agree with Terms &amp; Conditions</string>
+    <string name="text.tc">Terms &amp; Conditions</string>
+
     <string name="text.find_lot_parcel_using_address">Find the lot &amp; parcel using address</string>
     <string name="text.find_lot_parcel_using_current_location">Find the lot &amp; parcel using current location</string>
     <string name="text.find_address_using_lot_parcel">Find the address using lot &amp; parcel</string>
@@ -10,15 +13,18 @@
 
     <string name="text.lot">"Lot : "</string>
     <string name="text.parcel">"Parcel : "</string>
+    <string name="text.lot_parcel">"Lot %s Parcel %s"</string>
 
     <string name="text.address_not_found">Address not found</string>
     <string name="text.cadastre_not_found">Can\'t find Lot &amp; Parcel</string>
 
     <string name="text.ok">OK</string>
     <string name="text.cancel">Cancel</string>
+    <string name="text.go_to_setting">Go to Settings</string>
 
     <string name="text.normal">Standart Map</string>
     <string name="text.satellite">Satellite Map</string>
+    <string name="text.govmap">Gov Map</string>
 
     <string name="hint.city">City</string>
     <string name="hint.street">Street</string>
@@ -35,13 +41,13 @@
     <string name="message.address_not_found">Address not found. Do you want to try again?</string>
     <string name="message.cadastre_not_found">Can\'t find Lot &amp; Parcel. Do you want to try again?</string>
     <string name="message.change_locale">Setting will take effect after restarting application</string>
+    <string name="message.no_gps">Location services are disabled, to use all functionality of application, please enable them in Settings menu</string>
 
     <string name="title.main">Main Menu</string>
     <string name="title.select_address">Search By Address</string>
     <string name="title.lot_parcel">Search By Lot &amp; Parcel</string>
     <string name="title.map"> </string>
     
-    <string name="req_for_nubmer_format1" translatable="false">"גוש %s, חלקה %s"</string>
-    <string name="req_for_nubmer_format2" translatable="false">"גוש %s חלקה %s"</string>
+    <string name="req_for_nubmer_format" translatable="false">"גוש %s, חלקה %s"</string>
     <string name="req_for_cadastre" translatable="false">%s %s %s</string>
 </resources>
