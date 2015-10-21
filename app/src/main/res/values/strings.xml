@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Relocate</string>
@@ -11,9 +12,8 @@
 
     <string name="text.search">Search</string>
 
-    <string name="text.lot">"Lot : "</string>
-    <string name="text.parcel">"Parcel : "</string>
-    <string name="text.lot_parcel">"Lot %s Parcel %s"</string>
+    <string name="text.lot">"Lot"</string>
+    <string name="text.parcel">"Parcel"</string>
 
     <string name="text.address_not_found">Address not found</string>
     <string name="text.cadastre_not_found">Can\'t find Lot &amp; Parcel</string>
@@ -36,6 +36,7 @@
     <string name="action.waze">Open Waze</string>
     <string name="action.switch_lang">EN/HE</string>
 
+    <string name="message.no_current_location"  translatable="false">Can\'t receive your current location. Please make sure that Location Service enabled and try again</string>
     <string name="message.no_internet_connection">No internet connection. Do you want to try again?</string>
     <string name="message.connect_error">Error occurred while trying to connect to govmap. Trying again...</string>
     <string name="message.address_not_found">Address not found. Do you want to try again?</string>
