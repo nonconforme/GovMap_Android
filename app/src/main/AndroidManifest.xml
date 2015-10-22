@@ -41,6 +41,11 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".activity.SettingsActivity"
+            android:label="@string/title.setting"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/title.main"

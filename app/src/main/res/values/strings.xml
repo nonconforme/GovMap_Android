@@ -26,6 +26,8 @@
     <string name="text.satellite">Satellite Map</string>
     <string name="text.govmap">Gov Map</string>
 
+    <string name="text_version">"Version "</string>
+
     <string name="hint.city">City</string>
     <string name="hint.street">Street</string>
     <string name="hint.home">Home</string>
@@ -48,7 +50,8 @@
     <string name="title.select_address">Search By Address</string>
     <string name="title.lot_parcel">Search By Lot &amp; Parcel</string>
     <string name="title.map"> </string>
-    
+    <string name="title.setting">Settings</string>
+
     <string name="req_for_nubmer_format" translatable="false">"גוש %s, חלקה %s"</string>
     <string name="req_for_cadastre" translatable="false">%s %s %s</string>
 </resources>

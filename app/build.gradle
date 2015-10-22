@@ -8,8 +8,8 @@ android {
         applicationId "com.govmap"
         minSdkVersion Integer.parseInt(project.MIN_SDK_VERSION)
         targetSdkVersion Integer.parseInt(project.TARGET_SDK_VERSION)
-        versionCode 20
-        versionName "1.0.12"
+        versionCode 21
+        versionName "1.0.13"
     }
 
     buildTypes {

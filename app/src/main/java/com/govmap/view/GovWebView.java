@@ -62,7 +62,7 @@ public class GovWebView extends WebView {
         settings.setLoadWithOverviewMode(false);
         settings.setSupportMultipleWindows(false);
         settings.setRenderPriority(WebSettings.RenderPriority.HIGH);
-        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         settings.setAppCacheEnabled(true);
         settings.setDatabaseEnabled(true);
         settings.setDomStorageEnabled(true);

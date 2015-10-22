@@ -1,6 +1,5 @@
 package com.govmap.utils;
 
-import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
@@ -10,7 +9,7 @@ import com.govmap.R;
 /**
  * Created by Misha on 9/9/2015.
  */
-public class CustomTextWatcher implements TextWatcher{
+public class CustomTextWatcher implements TextWatcher {
     private EditText editText;
 
     public CustomTextWatcher(EditText editText) {
@@ -29,6 +28,7 @@ public class CustomTextWatcher implements TextWatcher{
 
     @Override
     public void afterTextChanged(Editable s) {
-        if(s.length() != 0) editText.setBackgroundResource(R.drawable.select_address_edit_text_bckg);
+        if (s.length() != 0)
+            editText.setBackgroundResource(R.drawable.select_address_edit_text_bckg);
     }
 }

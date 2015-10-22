@@ -67,9 +67,15 @@ public class MainActivity extends BaseActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_lang) {
-            return true;
+        switch (id) {
+            case R.id.action_lang: return true;
+            case R.id.action_settings: {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                return true;
+            }
+
         }
+
         return super.onOptionsItemSelected(item);
     }
 

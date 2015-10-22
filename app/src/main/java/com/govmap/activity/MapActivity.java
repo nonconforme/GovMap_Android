@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,7 +19,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +47,7 @@ import com.govmap.model.Result;
 import com.govmap.utils.DataSearchType;
 import com.govmap.utils.GeocodeClient;
 import com.govmap.view.GovProgressDialog;
+import com.govmap.view.GovWebView;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -73,8 +77,8 @@ public class MapActivity extends BaseActivity implements
     private GovProgressDialog mProgressDialog;
 
     private GoogleMap mMap;
-    private TextView mNormal, mSatellite, mGovmap;
-    private FrameLayout mGovmapFrame;
+    private TextView mNormalTab, mSatelliteTab, mGovmapTab;
+    private GovWebView mGovmap;
 
     private DataObject mData;
     private DataSearchType mSearchType;
@@ -94,13 +98,15 @@ public class MapActivity extends BaseActivity implements
 
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.activity_map_fragment)).getMap();
 
-        mGovmapFrame = (FrameLayout)findViewById(R.id.activity_map_frame_govmap);
-        mGovmapFrame.setVisibility(View.GONE);
-        mGovmapFrame.addView(wvGov);
+        mGovmap = (GovWebView)findViewById(R.id.activity_map_govmap);
+        mGovmap.setWebChromeClient(new WebChromeClient());
+        mGovmap.setWebViewClient(new GovWebClient());
+        mGovmap.setVisibility(View.GONE);
+        mGovmap.loadUrl(MainApplication.GOV_URL);
 
-        mNormal = (TextView) findViewById(R.id.activity_map_type_normal);
-        mSatellite = (TextView) findViewById(R.id.activity_map_type_satellite);
-        mGovmap = (TextView) findViewById(R.id.activity_map_type_govmap);
+        mNormalTab = (TextView) findViewById(R.id.activity_map_type_normal);
+        mSatelliteTab = (TextView) findViewById(R.id.activity_map_type_satellite);
+        mGovmapTab = (TextView) findViewById(R.id.activity_map_type_govmap);
 
         mProgressDialog = new GovProgressDialog(MapActivity.this);
 
@@ -111,9 +117,9 @@ public class MapActivity extends BaseActivity implements
                 .build();
         mGoogleApiClient.connect();
 
-        mNormal.setOnClickListener(MapActivity.this);
-        mSatellite.setOnClickListener(MapActivity.this);
-        mGovmap.setOnClickListener(MapActivity.this);
+        mNormalTab.setOnClickListener(MapActivity.this);
+        mSatelliteTab.setOnClickListener(MapActivity.this);
+        mGovmapTab.setOnClickListener(MapActivity.this);
 
         if (mMap != null && mData != null && mSearchType != null) {
             mMap.setMyLocationEnabled(true);
@@ -122,7 +128,6 @@ public class MapActivity extends BaseActivity implements
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-//            mMap.setOnMapLongClickListener(MapActivity.this);
             mMap.setOnMarkerDragListener(MapActivity.this);
 
             mMap.setInfoWindowAdapter(new CustomWindowInfoAdapter());
@@ -158,7 +163,6 @@ public class MapActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         mGoogleApiClient.disconnect();
-        mGovmapFrame.removeView(wvGov);
         ((MainApplication) getApplication()).clearHandlers();
         super.onDestroy();
     }
@@ -269,48 +273,47 @@ public class MapActivity extends BaseActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_map_type_normal: {
-                mNormal.setBackgroundResource(R.color.blue_dark);
-                mNormal.setTextColor(getResources().getColor(R.color.white));
+                mNormalTab.setBackgroundResource(R.color.blue_dark);
+                mNormalTab.setTextColor(getResources().getColor(R.color.white));
 
-                mSatellite.setBackgroundResource(R.color.white);
-                mSatellite.setTextColor(getResources().getColor(R.color.blue_dark));
+                mSatelliteTab.setBackgroundResource(R.color.white);
+                mSatelliteTab.setTextColor(getResources().getColor(R.color.blue_dark));
 
-                mGovmap.setBackgroundResource(R.color.white);
-                mGovmap.setTextColor(getResources().getColor(R.color.blue_dark));
+                mGovmapTab.setBackgroundResource(R.color.white);
+                mGovmapTab.setTextColor(getResources().getColor(R.color.blue_dark));
 
-                mGovmapFrame.setVisibility(View.GONE);
+                mGovmap.setVisibility(View.GONE);
                 if (mMap.getMapType() != GoogleMap.MAP_TYPE_NORMAL)
                     mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 break;
             }
             case R.id.activity_map_type_satellite: {
-                mSatellite.setBackgroundResource(R.color.blue_dark);
-                mSatellite.setTextColor(getResources().getColor(R.color.white));
+                mSatelliteTab.setBackgroundResource(R.color.blue_dark);
+                mSatelliteTab.setTextColor(getResources().getColor(R.color.white));
 
-                mNormal.setBackgroundResource(R.color.white);
-                mNormal.setTextColor(getResources().getColor(R.color.blue_dark));
+                mNormalTab.setBackgroundResource(R.color.white);
+                mNormalTab.setTextColor(getResources().getColor(R.color.blue_dark));
 
-                mGovmap.setBackgroundResource(R.color.white);
-                mGovmap.setTextColor(getResources().getColor(R.color.blue_dark));
+                mGovmapTab.setBackgroundResource(R.color.white);
+                mGovmapTab.setTextColor(getResources().getColor(R.color.blue_dark));
 
-                mGovmapFrame.setVisibility(View.GONE);
+                mGovmap.setVisibility(View.GONE);
                 if (mMap.getMapType() != GoogleMap.MAP_TYPE_SATELLITE)
                     mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                 break;
             }
             case R.id.activity_map_type_govmap: {
-                mGovmap.setBackgroundResource(R.color.blue_dark);
-                mGovmap.setTextColor(getResources().getColor(R.color.white));
+                mGovmapTab.setBackgroundResource(R.color.blue_dark);
+                mGovmapTab.setTextColor(getResources().getColor(R.color.white));
 
-                mNormal.setBackgroundResource(R.color.white);
-                mNormal.setTextColor(getResources().getColor(R.color.blue_dark));
+                mNormalTab.setBackgroundResource(R.color.white);
+                mNormalTab.setTextColor(getResources().getColor(R.color.blue_dark));
 
-                mSatellite.setBackgroundResource(R.color.white);
-                mSatellite.setTextColor(getResources().getColor(R.color.blue_dark));
+                mSatelliteTab.setBackgroundResource(R.color.white);
+                mSatelliteTab.setTextColor(getResources().getColor(R.color.blue_dark));
 
-                mGovmapFrame.setVisibility(View.VISIBLE);
-                if (!TextUtils.isEmpty(mData.getSearchAddress()))
-                    wvGov.loadUrl(String.format("javascript:(function() {document.getElementById('tbSearchWord').value = '%s';})();", mData.getSearchAddress()));
+                mGovmap.reload();
+                mGovmap.setVisibility(View.VISIBLE);
             }
 
         }
@@ -448,6 +451,33 @@ public class MapActivity extends BaseActivity implements
 
 
 
+    private class GovWebClient extends WebViewClient {
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            if (mGovmap.getVisibility() == View.VISIBLE) {
+                if (mProgressDialog != null && !mProgressDialog.isShowing())
+                    mProgressDialog.show();
+            }
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            if (mGovmap.getVisibility() == View.VISIBLE) {
+                if (mProgressDialog != null && mProgressDialog.isShowing())
+                    mProgressDialog.dismiss();
+            }
+
+            super.onPageFinished(view, url);
+            if (!TextUtils.isEmpty(mData.getSearchAddress()))
+                mGovmap.loadUrl(String.format("javascript:(function() {document.getElementById('tbSearchWord').value = '%s';})();", mData.getSearchAddress()));
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            return false;
+        }
+    }
 
 
     private class MapReceiver extends BroadcastReceiver {

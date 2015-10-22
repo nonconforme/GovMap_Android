@@ -59,12 +59,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <FrameLayout
-        android:id="@+id/activity_map_frame_govmap"
+    <com.govmap.view.GovWebView
+        android:id="@+id/activity_map_govmap"
         android:layout_above="@id/activity_map_types"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="@android:color/white"/>
+        android:visibility="gone"/>
 
 </RelativeLayout>

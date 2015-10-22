@@ -25,7 +25,7 @@ public class MainApplication extends Application implements Application.Activity
     public static String STYLE_NOT_VISIBLE = "none";
 
     // Site
-    private final static String GOV_URL = "http://www.govmap.gov.il/";
+    public final static String GOV_URL = "http://www.govmap.gov.il/";
 
     // Intents
     public static final String ACTION_LOAD_ERROR = "com.govmap.load_error";
