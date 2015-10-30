@@ -6,7 +6,7 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/activity_settings_version"
+        android:id="@+id/activity_about_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -15,7 +15,7 @@
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/activity_settings_tc"
+        android:id="@+id/activity_about_tc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -34,7 +34,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/activity_settings_tc_text"
+                android:id="@+id/activity_about_tc_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="temp"

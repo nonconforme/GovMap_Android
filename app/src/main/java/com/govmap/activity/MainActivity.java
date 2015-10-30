@@ -69,8 +69,8 @@ public class MainActivity extends BaseActivity implements
         int id = item.getItemId();
         switch (id) {
             case R.id.action_lang: return true;
-            case R.id.action_settings: {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            case R.id.action_about: {
+                startActivity(new Intent(MainActivity.this, AboutActivity.class));
                 return true;
             }
 

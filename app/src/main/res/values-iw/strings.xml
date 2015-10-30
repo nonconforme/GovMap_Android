@@ -25,7 +25,7 @@
     <string name="text.satellite">"תצלום אויר"</string>
     <string name="text.govmap">Gov Map</string>
 
-    <string name="text_version">"Version "</string>
+    <string name="text_version">"V. "</string>
 
     <string name="hint.city">"עיר"</string>
     <string name="hint.street">"רחוב"</string>
@@ -41,7 +41,7 @@
     <string name="title.select_address">"חפש לפי כתובת"</string>
     <string name="title.lot_parcel">"חפש לפי מספרי גיא"</string>
     <string name="title.map"> </string>
-    <string name="title.setting">Settings</string>
+    <string name="title.about">"אודות"</string>
 
     <string name="message.no_internet_connection">"אין חיבור לאינטרנט .האם אתה רוצה לנסות שוב?"</string>
     <string name="message.connect_error">"אירעה שגיאה בעת הניסיון להתחבר לgovmap. מנסה שוב..."</string>

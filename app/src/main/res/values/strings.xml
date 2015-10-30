@@ -50,7 +50,7 @@
     <string name="title.select_address">Search By Address</string>
     <string name="title.lot_parcel">Search By Lot &amp; Parcel</string>
     <string name="title.map"> </string>
-    <string name="title.setting">Settings</string>
+    <string name="title.about">About</string>
 
     <string name="req_for_nubmer_format" translatable="false">"גוש %s, חלקה %s"</string>
     <string name="req_for_cadastre" translatable="false">%s %s %s</string>

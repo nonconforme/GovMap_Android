@@ -12,19 +12,19 @@ import com.govmap.utils.Const;
 /**
  * Created by MediumMG on 22.10.2015.
  */
-public class SettingsActivity extends BaseActivity {
+public class AboutActivity extends BaseActivity {
 
     private TextView tvVersion, tvTextTC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_about);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        tvVersion = (TextView) findViewById(R.id.activity_settings_version);
-        tvTextTC = (TextView) findViewById(R.id.activity_settings_tc_text);
+        tvVersion = (TextView) findViewById(R.id.activity_about_version);
+        tvTextTC = (TextView) findViewById(R.id.activity_about_tc_text);
 
         tvTextTC.setText(AssetsUtil.readFileFromAssets(getAssets(), Const.TERMS_AND_CONDITIONS_FILE_NAME));
 

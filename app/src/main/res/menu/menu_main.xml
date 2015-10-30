@@ -11,8 +11,8 @@
         app:actionLayout="@layout/switch_layout"/>
 
     <item
-        android:id="@+id/action_settings"
-        android:title="@string/title.setting"
+        android:id="@+id/action_about"
+        android:title="@string/title.about"
         app:showAsAction="always"
         android:icon="@drawable/mr_ic_settings_dark"/>
 
